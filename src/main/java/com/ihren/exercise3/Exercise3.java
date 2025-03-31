@@ -37,10 +37,9 @@ public class Exercise3 {
     public String getElementId(String transactionId) {
         return Transaction.TRANSACTIONS.stream()
                 .filter(transaction -> transaction.getId().equals(transactionId)).findFirst()
-                .get()
+                .orElseThrow(() -> new NullPointerException("No transaction with id " + transactionId))
                 .getItem()
                 .getElement()
                 .getId();
-//        return "mock";
     }
 }

@@ -13,6 +13,7 @@ public class Exercise1Version2 {
             "IBM teams up with @lightbend to create a unified platform for #Java and #Scala #cognitive application development with tag #ChallengeEveryDay."
     );
 
+    // returns hashtags sorted by count without specifying, how many times it was used in text
     public static List<String> collectTweets() {
         Map<String, Long> collected = tweets.stream()
                 .map(str -> str.split("[ .,!?:;]"))
