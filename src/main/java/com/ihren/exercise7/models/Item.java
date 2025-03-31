@@ -10,9 +10,9 @@ import lombok.ToString;
 @ToString
 @EqualsAndHashCode
 public class Item {
-    Long id;
-    Long parentId;
-    Boolean isCancelled;
-    Action action;
-    String returnReason;
+    private Long id;
+    private Long parentId;
+    private Boolean isCancelled;
+    private Action action;
+    private String returnReason;
 }

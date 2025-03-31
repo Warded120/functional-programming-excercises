@@ -5,3 +5,4 @@ public class CustomerCommonData {
         return 1L;
     }
 }
+

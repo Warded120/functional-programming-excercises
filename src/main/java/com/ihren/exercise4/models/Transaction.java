@@ -8,5 +8,5 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 public class Transaction {
-    List<Item> items;
+    private List<Item> items;
 }

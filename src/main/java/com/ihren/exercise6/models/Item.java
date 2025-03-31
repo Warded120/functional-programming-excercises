@@ -6,6 +6,6 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class Item {
-    String type;
-    Boolean isExist;
+    private String type;
+    private Boolean isExist;
 }

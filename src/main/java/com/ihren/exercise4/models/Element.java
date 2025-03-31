@@ -8,5 +8,5 @@ import java.time.Instant;
 @Data
 @AllArgsConstructor
 public class Element {
-    Instant startDateTime;
+    private Instant startDateTime;
 }
