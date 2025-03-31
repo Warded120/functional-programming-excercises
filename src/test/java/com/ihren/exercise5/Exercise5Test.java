@@ -12,6 +12,7 @@ import static org.mockito.Mockito.*;
 class Exercise5Test {
 
     private final Exercise5 exercise5 = new Exercise5();
+    private static final Item dummyItem = new Item(new Sale(), "dummy", new Return(), new Data("dummy"));
 
     @Test
     void convertShouldReturnListOfItemsWhenAllFilterFunctionsReturnTrueTest() {
@@ -53,7 +54,8 @@ class Exercise5Test {
             mockedStatic.when(() -> Exercise5.filterItem(any(Item.class))).thenReturn(false);
             mockedStatic.when(() -> Exercise5.filterSale(any(Sale.class))).thenReturn(true);
             mockedStatic.when(() -> Exercise5.isReturnTransaction(any(Transaction.class))).thenReturn(true);
-            mockedStatic.when(() -> Exercise5.createItem(any(Item.class))).thenReturn(new Item());
+
+            mockedStatic.when(() -> Exercise5.createItem(any(Item.class))).thenReturn(dummyItem);
 
             //when
             List<Item> actual = exercise5.convert(ModelUtils.transaction);
@@ -72,7 +74,7 @@ class Exercise5Test {
             mockedStatic.when(() -> Exercise5.filterItem(any(Item.class))).thenReturn(true);
             mockedStatic.when(() -> Exercise5.filterSale(any(Sale.class))).thenReturn(false);
             mockedStatic.when(() -> Exercise5.isReturnTransaction(any(Transaction.class))).thenReturn(true);
-            mockedStatic.when(() -> Exercise5.createItem(any(Item.class))).thenReturn(new Item());
+            mockedStatic.when(() -> Exercise5.createItem(any(Item.class))).thenReturn(dummyItem);
 
             //when
             List<Item> actual = exercise5.convert(ModelUtils.transaction);
@@ -91,7 +93,7 @@ class Exercise5Test {
             mockedStatic.when(() -> Exercise5.filterItem(any(Item.class))).thenReturn(true);
             mockedStatic.when(() -> Exercise5.filterSale(any(Sale.class))).thenReturn(true);
             mockedStatic.when(() -> Exercise5.isReturnTransaction(any(Transaction.class))).thenReturn(false);
-            mockedStatic.when(() -> Exercise5.createItem(any(Item.class))).thenReturn(new Item());
+            mockedStatic.when(() -> Exercise5.createItem(any(Item.class))).thenReturn(dummyItem);
 
             //when
             List<Item> actual = exercise5.convert(ModelUtils.transaction);
@@ -100,4 +102,6 @@ class Exercise5Test {
             assertEquals(expectedItemCount, actual.size());
         }
     }
+
+    
 }

@@ -25,8 +25,8 @@ public class Exercise3 {
     public List<Item> filter(List<Item> items) {
         return items.stream()
                 .filter(item ->
-                    !SomeWrongType.contentEquals(item.getType()) &&
-                    Optional.of(getElementId(item.getTransactionId()))
+                    !SomeWrongType.contentEquals(item.type()) &&
+                    Optional.of(getElementId(item.transactionId()))
                             .map(Long::parseLong)
                             .filter(id -> id <= 7 && id >= 2)
                             .isPresent()
@@ -36,10 +36,10 @@ public class Exercise3 {
 
     public String getElementId(String transactionId) {
         return Transaction.TRANSACTIONS.stream()
-                .filter(transaction -> transaction.getId().equals(transactionId)).findFirst()
+                .filter(transaction -> transaction.id().equals(transactionId)).findFirst()
                 .orElseThrow(() -> new NullPointerException("No transaction with id " + transactionId))
-                .getItem()
-                .getElement()
-                .getId();
+                .item()
+                .element()
+                .id();
     }
 }

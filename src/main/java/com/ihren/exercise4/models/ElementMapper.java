@@ -1,7 +1,13 @@
 package com.ihren.exercise4.models;
 
-public class ElementMapper {
+// or use @UtilityClass
+public final class ElementMapper {
+
+    private ElementMapper() {
+        throw new UnsupportedOperationException("Utility class cannot be instantiated");
+    }
+
     public static Element map(Element element) {
-        throw new RuntimeException("should not be called without mocked static");
+        throw new UnsupportedOperationException("should not be called without mocked static");
     }
 }

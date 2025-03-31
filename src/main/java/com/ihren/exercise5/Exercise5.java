@@ -46,23 +46,26 @@ public class Exercise5 {
 
 
     public List<Item> convert(Transaction transaction) {
-        return transaction.getItems().stream()
+
+        return Optional.ofNullable(transaction.items())
+                .orElseGet(List::of)
+                .stream()
                 .filter(item ->
                     filterItem(item) &&
                     (
                         (
-                                Optional.ofNullable(item.getSale())
+                                Optional.ofNullable(item.sale())
                                         .filter(Exercise5::filterSale)
                                         .isPresent()
                         ) || (
-                            Optional.ofNullable(item.getAReturn()).isPresent() &&
+                            Optional.ofNullable(item.aReturn()).isPresent() &&
                             isReturnTransaction(transaction) &&
-                            Optional.ofNullable(item.getData())
-                                .map(Data::getType)
+                            Optional.ofNullable(item.data())
+                                .map(Data::type)
                                 .filter(type -> type.equals(someType))
                                 .isPresent()
                         ) || (
-                            Optional.ofNullable(item.getFuelSale()).isPresent()
+                            Optional.ofNullable(item.fuelSale()).isPresent()
                         )
                     )
                 )
@@ -72,18 +75,18 @@ public class Exercise5 {
 
 
     public static boolean filterItem(Item item) {
-        throw new RuntimeException("Should not be called without mocked static");
+        throw new UnsupportedOperationException("Should not be called without mocked static");
     }
 
     public static boolean filterSale(Sale sale) {
-        throw new RuntimeException("Should not be called without mocked static");
+        throw new UnsupportedOperationException("Should not be called without mocked static");
     }
 
     public static boolean isReturnTransaction(Transaction transaction) {
-        throw new RuntimeException("Should not be called without mocked static");
+        throw new UnsupportedOperationException("Should not be called without mocked static");
     }
 
     public static Item createItem(Item item) {
-        throw new RuntimeException("Should not be called without mocked static");
+        throw new UnsupportedOperationException("Should not be called without mocked static");
     }
 }

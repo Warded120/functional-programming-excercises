@@ -45,19 +45,19 @@ public class Exercise7 {
                 .stream()
                 .filter(item ->
                         !(
-                                Optional.ofNullable(item.getIsCancelled())
+                                Optional.ofNullable(item.isCancelled())
                                 .orElse(false) ||
                                 (
-                                    Optional.ofNullable(item.getIsCancelled())
+                                    Optional.ofNullable(item.isCancelled())
                                             .orElse(false) &&
-                                    Optional.ofNullable(item.getParentId())
-                                            .filter(item.getId()::equals)
+                                    Optional.ofNullable(item.parentId())
+                                            .filter(item.id()::equals)
                                             .isPresent()
                                 ) ||
-                                Optional.ofNullable(item.getAction())
+                                Optional.ofNullable(item.action())
                                         .filter(action -> action.equals(SKIPPED))
                                         .isPresent() ||
-                                Optional.ofNullable(item.getReturnReason())
+                                Optional.ofNullable(item.returnReason())
                                         .isPresent()
                         )
                 )

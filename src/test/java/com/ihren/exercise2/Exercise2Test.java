@@ -17,7 +17,9 @@ class Exercise2Test {
     void getIdRefactoredShouldReturnCustomerCommonDataIdWhenEverythingIsInitializedTest() {
         //given
         Transaction transaction = new Transaction(
+                "something",
                 new Item(
+                        "something",
                         new Element("a")
                 )
         );
@@ -38,7 +40,9 @@ class Exercise2Test {
     void getIdShouldReturnNullWhenElementIsNullTest() {
         //given
         Transaction transaction = new Transaction(
+                "something",
                 new Item(
+                        "something",
                         null
                 )
         );
@@ -47,7 +51,27 @@ class Exercise2Test {
         String actual = exercise2.getId(transaction);
 
         //then
-        System.out.println(actual);
         assertNull(actual);
+    }
+
+    @Test
+    void getIdShouldNullWhenCustomerCommonDataIsNullTest() {
+        //given
+        Transaction transaction = new Transaction(
+                "something",
+                new Item(
+                        "something",
+                        new Element("a")
+                )
+        );
+
+        try (MockedStatic<CustomerCommonData> mockedStatic = Mockito.mockStatic(CustomerCommonData.class)) {
+            mockedStatic.when(CustomerCommonData::getId).thenReturn(null);
+            //when
+            String actual = exercise2.getId(transaction);
+            //then
+            assertNull(actual);
+            mockedStatic.verify(CustomerCommonData::getId);
+        }
     }
 }

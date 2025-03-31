@@ -1,11 +1,9 @@
 package com.ihren.exercise6;
 
 import com.ihren.exercise6.models.Item;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -27,7 +25,7 @@ class Exercise6Test {
 
     @ParameterizedTest
     @MethodSource("provideItemsAndExpectedResult")
-    void filterShouldReturnTrueWhenItemIsNotNullAndTypeEqualSomeTypeTest(Item item, boolean expected) {
+    void filterShouldReturnExpectedBooleanTest(Item item, boolean expected) {
         assertEquals(expected, exercise6.filter(item));
     }
 }

@@ -1,16 +1,11 @@
 package com.ihren.exercise3.models;
 
-import lombok.*;
-
 import java.util.List;
 
-@Data
-@AllArgsConstructor
-@RequiredArgsConstructor
-@EqualsAndHashCode
-public class Transaction {
-    private String id;
-    private final Item item;
+public record Transaction (
+    String id,
+    Item item
+) {
 
     public static final List<Transaction> TRANSACTIONS =
             List.of(
@@ -47,6 +42,6 @@ public class Transaction {
             );
 
     public static final List<Item> ITEMS = TRANSACTIONS.stream()
-            .map(Transaction::getItem)
+            .map(Transaction::item)
             .toList();
 }

@@ -26,19 +26,19 @@ public class Exercise4 {
 //    }
 
     public List<Item> convert(Transaction transaction) {
-        return transaction.getItems()
+        return transaction.items()
                 .stream()
                 .filter(item ->
                             Optional.ofNullable(item).isPresent() &&
-                            Optional.ofNullable(item.getStartDateTime()).isPresent() &&
-                            Optional.ofNullable(item.getElement())
+                            Optional.ofNullable(item.startDateTime()).isPresent() &&
+                            Optional.ofNullable(item.element())
                                     .map(ElementMapper::map)
                                     .isPresent()
-                        )
+                )
                 .map(item -> {
-                    Optional.of(item.getStartDateTime())
+                    Optional.of(item.startDateTime())
                             .ifPresent(startDateTime ->
-                                item.getElement().setStartDateTime(DateTimeUtils.getInstant(startDateTime))
+                                item.element().setStartDateTime(DateTimeUtils.getInstant(startDateTime))
                             );
                     return item;
                 })

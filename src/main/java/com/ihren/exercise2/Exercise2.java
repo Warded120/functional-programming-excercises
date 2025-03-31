@@ -1,5 +1,6 @@
 package com.ihren.exercise2;
 
+import com.ihren.exercise2.models.Element;
 import com.ihren.exercise2.models.Item;
 import com.ihren.exercise2.models.Transaction;
 import com.ihren.exercise2.models.CustomerCommonData;
@@ -23,10 +24,13 @@ public class Exercise2 {
 
     public String getId(Transaction transaction) {
         return Optional.of(transaction)
-                .map(Transaction::getItem)
-                .map(Item::getElement)
-                .filter(element -> element.getId() != null)
-                .map(element -> CustomerCommonData.getId().toString())
+                .map(Transaction::item)
+                .map(Item::element)
+                .map(Element::id)
+                .map(id ->
+                        Optional.ofNullable(CustomerCommonData.getId())
+                            .map(data -> data.toString()).orElse(null)
+                )
                 .orElse(null);
     }
 }

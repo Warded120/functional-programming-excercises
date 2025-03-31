@@ -42,6 +42,6 @@ public class ModelUtils {
             );
 
     public static final List<Item> items = transactions.stream()
-            .map(Transaction::getItem)
+            .map(Transaction::item)
             .toList();
 }
