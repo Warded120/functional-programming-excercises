@@ -13,7 +13,6 @@ class Exercise5Test {
 
     private final Exercise5 exercise5 = new Exercise5();
 
-    //TODO: maybe assert the array instead if its size
     @Test
     void convertShouldReturnListOfItemsWhenAllFilterFunctionsReturnTrueTest() {
         //given
@@ -32,8 +31,10 @@ class Exercise5Test {
             mockedStatic.when(() -> Exercise5.createItem(any(Item.class)))
                     .thenAnswer(invocationOnMock -> invocationOnMock.<Item>getArgument(0));
 
+            //when
             List<Item> actual = exercise5.convert(ModelUtils.transaction);
 
+            //then
             assertEquals(expected, actual);
 
             mockedStatic.verify(() -> Exercise5.filterItem(any(Item.class)), times(7));
@@ -54,8 +55,10 @@ class Exercise5Test {
             mockedStatic.when(() -> Exercise5.isReturnTransaction(any(Transaction.class))).thenReturn(true);
             mockedStatic.when(() -> Exercise5.createItem(any(Item.class))).thenReturn(new Item());
 
+            //when
             List<Item> actual = exercise5.convert(ModelUtils.transaction);
 
+            //then
             assertEquals(expectedItemCount, actual.size());
         }
     }
@@ -71,8 +74,10 @@ class Exercise5Test {
             mockedStatic.when(() -> Exercise5.isReturnTransaction(any(Transaction.class))).thenReturn(true);
             mockedStatic.when(() -> Exercise5.createItem(any(Item.class))).thenReturn(new Item());
 
+            //when
             List<Item> actual = exercise5.convert(ModelUtils.transaction);
 
+            //then
             assertEquals(expectedItemCount, actual.size());
         }
     }
@@ -88,8 +93,10 @@ class Exercise5Test {
             mockedStatic.when(() -> Exercise5.isReturnTransaction(any(Transaction.class))).thenReturn(false);
             mockedStatic.when(() -> Exercise5.createItem(any(Item.class))).thenReturn(new Item());
 
+            //when
             List<Item> actual = exercise5.convert(ModelUtils.transaction);
 
+            //then
             assertEquals(expectedItemCount, actual.size());
         }
     }
