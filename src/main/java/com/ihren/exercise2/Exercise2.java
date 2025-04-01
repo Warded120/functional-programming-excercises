@@ -22,14 +22,16 @@ public class Exercise2 {
 //        return result;
 //    }
 
+    private CustomerCommonData customerCommonData;
+
     public String getId(Transaction transaction) {
-        return Optional.of(transaction)
+        return Optional.ofNullable(transaction)
                 .map(Transaction::item)
                 .map(Item::element)
                 .map(Element::id)
-                .map(id ->
-                        Optional.ofNullable(CustomerCommonData.getId())
-                            .map(data -> data.toString()).orElse(null)
+                .flatMap(id ->
+                        Optional.ofNullable(customerCommonData.id())
+                        .map(Object::toString)
                 )
                 .orElse(null);
     }

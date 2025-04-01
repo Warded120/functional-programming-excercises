@@ -21,10 +21,11 @@ public class Exercise6 {
     public boolean filter(Item item) {
         return  Optional.ofNullable(item)
                     .map(Item::type)
-                    .filter(type -> type.equalsIgnoreCase(SOME_TYPE))
-                    .isPresent() ||
-                Optional.ofNullable(item)
-                    .map(Item::isExist)
+                    .map(type -> type.equalsIgnoreCase(SOME_TYPE))
+                    .or(() ->
+                            Optional.ofNullable(item)
+                            .map(Item::isExist)
+                    )
                     .orElse(false);
     }
 

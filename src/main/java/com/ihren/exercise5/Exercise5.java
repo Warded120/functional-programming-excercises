@@ -5,6 +5,7 @@ import com.ihren.exercise5.models.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 public class Exercise5 {
 //    public List<Item> convert(Transaction transaction) {
@@ -45,36 +46,30 @@ public class Exercise5 {
     private final String someType = "SOME_TYPE";
 
 
+    // tried to avoid && and || operators as much as possible
     public List<Item> convert(Transaction transaction) {
-
-        return Optional.ofNullable(transaction.items())
-                .orElseGet(List::of)
-                .stream()
+        return Stream.ofNullable(transaction)
+                .map(Transaction::items)
+                .map(Exercise5::filterItems)
+                .flatMap(List::stream)
                 .filter(item ->
-                    filterItem(item) &&
-                    (
-                        (
-                                Optional.ofNullable(item.sale())
-                                        .filter(Exercise5::filterSale)
-                                        .isPresent()
-                        ) || (
-                            Optional.ofNullable(item.aReturn()).isPresent() &&
-                            isReturnTransaction(transaction) &&
-                            Optional.ofNullable(item.data())
-                                .map(Data::type)
+                        Optional.ofNullable(item.sale())
+                                .filter(Exercise5::filterSale)
+                                .isPresent() ||
+                        Optional.ofNullable(item.aReturn())
+                                .filter(aReturn -> isReturnTransaction(transaction))
+                                .flatMap(aReturn -> Optional.ofNullable(item.data()))
+                                .flatMap(data -> Optional.ofNullable(data.type()))
                                 .filter(type -> type.equals(someType))
+                                .isPresent() ||
+                        Optional.ofNullable(item.fuelSale())
                                 .isPresent()
-                        ) || (
-                            Optional.ofNullable(item.fuelSale()).isPresent()
-                        )
-                    )
                 )
                 .map(Exercise5::createItem)
                 .toList();
     }
 
-
-    public static boolean filterItem(Item item) {
+    public static List<Item> filterItems(List<Item> item) {
         throw new UnsupportedOperationException("Should not be called without mocked static");
     }
 

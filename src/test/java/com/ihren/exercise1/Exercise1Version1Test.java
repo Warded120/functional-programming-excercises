@@ -4,12 +4,21 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 
 class Exercise1Version1Test {
+
+    public static final List<String> tweets = List.of(
+            "#Java and #Scala play a key role in AI and cognitive computing. IBM believes the future lies in cognitive technology.",
+            "Here's an update on IBM’s backing of #Scala and Lightbend: http8/ibm-lightbend-partnership-enterprise",
+            "IBM teams up with @lightbend to create a unified platform for #Java and #Scala #cognitive application development with tag #ChallengeEveryDay."
+    );
+
+    Exercise1Version1 exercise1Version1 = new Exercise1Version1();
 
     @Test
     void collectTweetsShouldReturnSortedTweetsByCountTest() {
@@ -21,7 +30,7 @@ class Exercise1Version1Test {
         expected.put("#cognitive", 1L);
 
         //when
-        LinkedHashMap<String, Long> actual = (LinkedHashMap<String, Long>) Exercise1Version1.collectTweets();
+        LinkedHashMap<String, Long> actual = (LinkedHashMap<String, Long>) exercise1Version1.collectTweets(tweets);
 
         //then
         assertEquals(expected.size(), actual.size(), "Map sizes are different");
@@ -47,7 +56,7 @@ class Exercise1Version1Test {
         expected.put("#Scala", 3L);
 
         //when
-        LinkedHashMap<String, Long> actual = (LinkedHashMap<String, Long>) Exercise1Version1.collectTweets();
+        LinkedHashMap<String, Long> actual = (LinkedHashMap<String, Long>) exercise1Version1.collectTweets(tweets);
 
         //then
         assertEquals(expected.size(), actual.size(), "Map sizes are different");
@@ -65,5 +74,10 @@ class Exercise1Version1Test {
             }
         }
         assertFalse(linkedHashMapOrdered);
+    }
+
+    @Test
+    void collectTweetsShouldReturnEmptyMapWhenTweetsIsNull() {
+        assertEquals(Map.of(), exercise1Version1.collectTweets(null));
     }
 }

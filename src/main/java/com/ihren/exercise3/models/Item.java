@@ -1,7 +1,7 @@
 package com.ihren.exercise3.models;
 
 public record Item (
-    String type,
+    CharSequence type,
     Element element,
     String transactionId
 ) {}

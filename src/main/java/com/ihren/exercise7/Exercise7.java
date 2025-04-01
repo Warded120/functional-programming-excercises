@@ -3,6 +3,7 @@ package com.ihren.exercise7;
 import com.ihren.exercise7.models.*;
 
 import java.util.*;
+import java.util.stream.Stream;
 
 import static com.ihren.exercise7.models.Action.SKIPPED;
 
@@ -40,26 +41,22 @@ public class Exercise7 {
 //    }
 
     public List<Item> filter(List<Item> items) {
-        return Optional.ofNullable(items)
-                .orElseGet(List::of)
-                .stream()
+        return Stream.ofNullable(items)
+                .flatMap(List::stream)
                 .filter(item ->
-                        !(
-                                Optional.ofNullable(item.isCancelled())
-                                .orElse(false) ||
-                                (
-                                    Optional.ofNullable(item.isCancelled())
-                                            .orElse(false) &&
-                                    Optional.ofNullable(item.parentId())
-                                            .filter(item.id()::equals)
-                                            .isPresent()
-                                ) ||
-                                Optional.ofNullable(item.action())
-                                        .filter(action -> action.equals(SKIPPED))
-                                        .isPresent() ||
-                                Optional.ofNullable(item.returnReason())
-                                        .isPresent()
-                        )
+                    !(
+                        Optional.ofNullable(item.isCancelled())
+                            .orElse(false) ||
+                        Optional.ofNullable(item.isCancelled())
+                            .flatMap(isCancelled -> Optional.ofNullable(item.parentId()))
+                            .filter(pId -> Optional.ofNullable(item.id()).equals(pId))
+                            .isPresent() ||
+                        Optional.ofNullable(item.action())
+                            .filter(action -> action.equals(SKIPPED))
+                            .isPresent() ||
+                        Optional.ofNullable(item.returnReason())
+                            .isPresent()
+                    )
                 )
                 .toList();
     }

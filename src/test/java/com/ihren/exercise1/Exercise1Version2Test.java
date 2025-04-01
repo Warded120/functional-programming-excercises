@@ -1,12 +1,13 @@
 package com.ihren.exercise1;
 
 import org.junit.jupiter.api.Test;
-
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class Exercise1Version2Test {
+    Exercise1Version2 exercise1Version2 = new Exercise1Version2();
+
     @Test
     void collectTweetsShouldReturnSortedTweetsListByCountTest() {
         //given
@@ -18,7 +19,7 @@ class Exercise1Version2Test {
         );
 
         //when
-        List<String> actual = Exercise1Version2.collectTweets();
+        List<String> actual = exercise1Version2.collectTweets(ModelUtils.TWEETS);
 
         //then
         assertEquals(expected, actual);
@@ -35,9 +36,14 @@ class Exercise1Version2Test {
         );
 
         //when
-        List<String> actual = Exercise1Version2.collectTweets();
+        List<String> actual = exercise1Version2.collectTweets(ModelUtils.TWEETS);
 
         //then
         assertNotEquals(expected, actual);
+    }
+
+    @Test
+    void collectTweetsShouldReturnEmptyListWhenTweetsIsNullTest() {
+        assertEquals(List.of(), exercise1Version2.collectTweets(null));
     }
 }

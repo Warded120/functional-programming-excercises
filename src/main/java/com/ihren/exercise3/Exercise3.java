@@ -1,13 +1,16 @@
 package com.ihren.exercise3;
 
 import com.ihren.exercise3.models.Item;
-import com.ihren.exercise3.models.SomeWrongType;
-import com.ihren.exercise3.models.Transaction;
+import io.vavr.control.Try;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 public class Exercise3 {
+    public static final int ID_UPPER_BOUND = 7;
+    public static final int ID_LOWER_BOUND = 2;
+    private final String SOME_WRONG_TYPE = "SOME_WRONG_TYPE";
 //    public List<Item> filter(List<Item> items) {
 //        return items.stream()
 //                .filter(item -> !SomeWrongType.contentEquals(item.getType()))
@@ -23,23 +26,20 @@ public class Exercise3 {
 //    }
 
     public List<Item> filter(List<Item> items) {
-        return items.stream()
+        return Stream.ofNullable(items)
+                .flatMap(List::stream)
+                .filter(item -> !SOME_WRONG_TYPE.contentEquals(item.type()))
                 .filter(item ->
-                    !SomeWrongType.contentEquals(item.type()) &&
-                    Optional.of(getElementId(item.transactionId()))
-                            .map(Long::parseLong)
-                            .filter(id -> id <= 7 && id >= 2)
+                    Optional.ofNullable(getElementId(item.transactionId()))
+                            //TODO: it should/not throw numberFormatException
+                            .map(str -> Try.of(() -> Long.parseLong(str)).getOrElse((Long) null))
+                            .filter(id -> id <= ID_UPPER_BOUND && id >= ID_LOWER_BOUND)
                             .isPresent()
                 )
                 .toList();
     }
 
-    public String getElementId(String transactionId) {
-        return Transaction.TRANSACTIONS.stream()
-                .filter(transaction -> transaction.id().equals(transactionId)).findFirst()
-                .orElseThrow(() -> new NullPointerException("No transaction with id " + transactionId))
-                .item()
-                .element()
-                .id();
+    protected String getElementId(String transactionId) {
+        throw new UnsupportedOperationException("Should not be called without mocking");
     }
 }

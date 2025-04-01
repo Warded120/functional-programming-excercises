@@ -7,6 +7,7 @@ import com.ihren.exercise4.models.Transaction;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 public class Exercise4 {
 //    public List<Item> convert(Transaction transaction) {
@@ -26,17 +27,18 @@ public class Exercise4 {
 //    }
 
     public List<Item> convert(Transaction transaction) {
-        return transaction.items()
-                .stream()
+        return Stream.ofNullable(transaction)
+                .map(Transaction::items)
+                .flatMap(List::stream)
                 .filter(item ->
-                            Optional.ofNullable(item).isPresent() &&
-                            Optional.ofNullable(item.startDateTime()).isPresent() &&
-                            Optional.ofNullable(item.element())
+                            Optional.ofNullable(item)
+                                    .flatMap(itemOpt -> Optional.ofNullable(itemOpt.startDateTime()))
+                                    .flatMap(localDateTime -> Optional.ofNullable(item.element()))
                                     .map(ElementMapper::map)
                                     .isPresent()
                 )
                 .map(item -> {
-                    Optional.of(item.startDateTime())
+                    Optional.ofNullable(item.startDateTime())
                             .ifPresent(startDateTime ->
                                 item.element().setStartDateTime(DateTimeUtils.getInstant(startDateTime))
                             );

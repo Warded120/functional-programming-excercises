@@ -2,18 +2,28 @@ package com.ihren.exercise3;
 
 import com.ihren.exercise3.models.Element;
 import com.ihren.exercise3.models.Item;
-import com.ihren.exercise3.models.SomeWrongType;
-import com.ihren.exercise3.models.Transaction;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.MockedStatic;
+import org.mockito.InjectMocks;
+import org.mockito.MockitoAnnotations;
+import org.mockito.Spy;
+
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.doThrow;
 
 class Exercise3Test {
 
-    private final Exercise3 exercise3 = new Exercise3();
+    @Spy
+    @InjectMocks
+    private Exercise3 exercise3;
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
 
     @Test
     void filterShouldReturnListOfItemsTest() {
@@ -35,41 +45,20 @@ class Exercise3Test {
                         "d"
                 )
         );
+        doReturn("1").when(exercise3).getElementId("a");
+        doReturn("2").when(exercise3).getElementId("b");
+        doReturn("3").when(exercise3).getElementId("c");
+        doReturn("4").when(exercise3).getElementId("d");
+        doReturn("NotANumber").when(exercise3).getElementId("e");
 
         //when
-        try(MockedStatic<SomeWrongType> mockedStatic = mockStatic(SomeWrongType.class)) {
-            mockedStatic.when(() -> SomeWrongType.contentEquals(anyString())).thenReturn(false);
-            mockedStatic.when(() -> SomeWrongType.contentEquals("someWrongContent")).thenReturn(true);
-
-            List<Item> actual = exercise3.filter(Transaction.ITEMS);
-
-            //then
-            assertEquals(expected, actual);
-        }
+        //then
+        List<Item> actual = assertDoesNotThrow(() -> exercise3.filter(ModelUtils.ITEMS));
+        assertEquals(expected, actual);
     }
 
     @Test
-    void filterShouldThrowNumberFormatExceptionWhenElementIdIsInvalidFormatTest() {
-        //given
-        List<Item> items = List.of(
-                new Item(
-                        "a",
-                        new Element("notANumber"),
-                        "a"
-                )
-        );
-
-        //when
-        try(MockedStatic<SomeWrongType> mockedStatic = mockStatic(SomeWrongType.class)) {
-            mockedStatic.when(() -> SomeWrongType.contentEquals(anyString())).thenReturn(false);
-
-            //then
-            assertThrows(NumberFormatException.class, () -> exercise3.filter(Transaction.ITEMS));
-        }
-    }
-
-    @Test
-    void filterShouldThrowNullPointerExceptionWhenNoTransactionIdFound() {
+    void filterShouldThrowNullPointerExceptionWhenTransactionIdNotFound() {
         //given
         List<Item> nonexistentTransactionId = List.of(
                     new Item("typeA",
@@ -78,12 +67,15 @@ class Exercise3Test {
                     )
         );
 
-        //when
-        try(MockedStatic<SomeWrongType> mockedStatic = mockStatic(SomeWrongType.class)) {
-            mockedStatic.when(() -> SomeWrongType.contentEquals(anyString())).thenReturn(false);
+        doThrow(NullPointerException.class).when(exercise3).getElementId("nonexistentId");
 
-            //then
-            assertThrows(NullPointerException.class, () -> exercise3.filter(nonexistentTransactionId));
-        }
+        //when
+        //then
+        assertThrows(NullPointerException.class, () -> exercise3.filter(nonexistentTransactionId));
+    }
+
+    @Test
+    void filterShouldReturnEmptyListWhenItemsIsNull() {
+        assertEquals(List.of(), exercise3.filter(null));
     }
 }
