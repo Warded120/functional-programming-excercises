@@ -31,19 +31,42 @@ public class Exercise4 {
                 .map(Transaction::items)
                 .flatMap(List::stream)
                 .filter(item ->
-                            Optional.ofNullable(item)
-                                    .flatMap(itemOpt -> Optional.ofNullable(itemOpt.startDateTime()))
-                                    .flatMap(localDateTime -> Optional.ofNullable(item.element()))
-                                    .map(ElementMapper::map)
-                                    .isPresent()
+                    Optional.ofNullable(item)
+                        .flatMap(itemOpt -> Optional.ofNullable(itemOpt.startDateTime()))
+                        .flatMap(localDateTime -> Optional.ofNullable(item.element()))
+                        .map(ElementMapper::map)
+                        .map(element -> {
+                            Optional.ofNullable(item.startDateTime())
+                                .ifPresent(startDateTime ->
+                                    element.setStartDateTime(DateTimeUtils.getInstant(startDateTime))
+                                );
+                            return element;
+                        })
+                        .isPresent()
                 )
-                .map(item -> {
-                    Optional.ofNullable(item.startDateTime())
-                            .ifPresent(startDateTime ->
-                                item.element().setStartDateTime(DateTimeUtils.getInstant(startDateTime))
-                            );
-                    return item;
-                })
                 .toList();
     }
+
+//    public List<Item> convert0(Transaction transaction) {
+//        return Stream.ofNullable(transaction)
+//                .map(Transaction::items)
+//                .flatMap(List::stream)
+//                .filter(item ->
+//                        Optional.ofNullable(item)
+//                                .flatMap(itemOpt -> Optional.ofNullable(itemOpt.startDateTime()))
+//                                .flatMap(localDateTime -> Optional.ofNullable(item.element()))
+//                                .map(ElementMapper::map)
+//                                .ifPresent(element -> {
+//                                            Optional.ofNullable(item.startDateTime())
+//                                                    .ifPresent(startDateTime ->
+//                                                            item.element().setStartDateTime(DateTimeUtils.getInstant(startDateTime))
+//                                                    );
+//                                            return true;
+//                                        }
+//                                )
+//                )
+//
+//                .map()
+//                .toList();
+//    }
 }

@@ -12,26 +12,26 @@ public class Exercise7 {
 //        List<Item> filteredItems = new ArrayList<>();
 //        Set<Long> parentItemIds = new HashSet<>();
 //        for (Item item : items) {
-//            Optional.ofNullable(item.getIsCancelled())
+//            Optional.ofNullable(item.isCancelled())
 //                    .ifPresent(flag -> {
 //                        if (Boolean.TRUE.equals(flag)) {
 //                            filteredItems.add(item);
-//                            if (item.getParentId() != null) {
-//                                parentItemIds.add(item.getParentId());
+//                            if (item.parentId() != null) {
+//                                parentItemIds.add(item.parentId());
 //                            }
 //                        }
 //                    });
-//            Optional.ofNullable(item.getAction())
+//            Optional.ofNullable(item.action())
 //                    .ifPresent(action -> {
 //                        if (action.toString().equalsIgnoreCase("SKIPPED")) {
 //                            filteredItems.add(item);
 //                        }
 //                    });
-//            Optional.ofNullable(item.getReturnReason())
+//            Optional.ofNullable(item.returnReason())
 //                    .ifPresent(returnReason -> filteredItems.add(item));
 //        }
 //        for (Item item : items) {
-//            if (parentItemIds.contains(item.getId())) {
+//            if (parentItemIds.contains(item.id())) {
 //                filteredItems.add(item);
 //            }
 //        }

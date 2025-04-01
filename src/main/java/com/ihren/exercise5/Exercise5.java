@@ -50,11 +50,11 @@ public class Exercise5 {
     public List<Item> convert(Transaction transaction) {
         return Stream.ofNullable(transaction)
                 .map(Transaction::items)
-                .map(Exercise5::filterItems)
+                .map(this::filterItems)
                 .flatMap(List::stream)
                 .filter(item ->
                         Optional.ofNullable(item.sale())
-                                .filter(Exercise5::filterSale)
+                                .filter(this::filterSale)
                                 .isPresent() ||
                         Optional.ofNullable(item.aReturn())
                                 .filter(aReturn -> isReturnTransaction(transaction))
@@ -65,23 +65,23 @@ public class Exercise5 {
                         Optional.ofNullable(item.fuelSale())
                                 .isPresent()
                 )
-                .map(Exercise5::createItem)
+                .map(this::createItem)
                 .toList();
     }
 
-    public static List<Item> filterItems(List<Item> item) {
+    protected List<Item> filterItems(List<Item> item) {
         throw new UnsupportedOperationException("Should not be called without mocked static");
     }
 
-    public static boolean filterSale(Sale sale) {
+    protected boolean filterSale(Sale sale) {
         throw new UnsupportedOperationException("Should not be called without mocked static");
     }
 
-    public static boolean isReturnTransaction(Transaction transaction) {
+    protected boolean isReturnTransaction(Transaction transaction) {
         throw new UnsupportedOperationException("Should not be called without mocked static");
     }
 
-    public static Item createItem(Item item) {
+    protected Item createItem(Item item) {
         throw new UnsupportedOperationException("Should not be called without mocked static");
     }
 }
