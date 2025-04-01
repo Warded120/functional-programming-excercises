@@ -31,7 +31,6 @@ public class Exercise3 {
                 .filter(item -> !SOME_WRONG_TYPE.contentEquals(item.type()))
                 .filter(item ->
                     Optional.ofNullable(getElementId(item.transactionId()))
-                            //TODO: it should/not throw numberFormatException
                             .map(str -> Try.of(() -> Long.parseLong(str)).getOrElse((Long) null))
                             .filter(id -> id <= ID_UPPER_BOUND && id >= ID_LOWER_BOUND)
                             .isPresent()
