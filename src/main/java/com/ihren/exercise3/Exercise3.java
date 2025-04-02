@@ -7,8 +7,8 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 public class Exercise3 {
-    private static final int ID_UPPER_BOUND = 7;
-    private static final int ID_LOWER_BOUND = 2;
+    private static final Integer ID_UPPER_BOUND = 7;
+    private static final Integer ID_LOWER_BOUND = 2;
     private static final String SOME_WRONG_TYPE = "SOME_WRONG_TYPE";
 //    public List<Item> filter(List<Item> items) {
 //        return items.stream()

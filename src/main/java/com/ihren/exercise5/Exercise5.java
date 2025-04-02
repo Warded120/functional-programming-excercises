@@ -44,7 +44,7 @@ public class Exercise5 {
 //        return items;
 //    }
 
-    private final String someType = "SOME_TYPE";
+    private static final String SOME_TYPE = "SOME_TYPE";
 
     public List<Item> convert(Transaction transaction) {
         return Stream.ofNullable(transaction)
@@ -59,7 +59,7 @@ public class Exercise5 {
                                 .filter(aReturn -> isReturnTransaction(transaction))
                                 .flatMap(aReturn -> Optional.ofNullable(item.data()))
                                 .flatMap(data -> Optional.ofNullable(data.type()))
-                                .filter(type -> type.equals(someType))
+                                .filter(type -> type.equals(SOME_TYPE))
                                 .isPresent() ||
                         Optional.ofNullable(item.fuelSale())
                                 .isPresent()

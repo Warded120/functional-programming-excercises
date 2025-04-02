@@ -7,7 +7,6 @@ import com.ihren.exercise4.models.Transaction;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 public class Exercise4 {
 //    public List<Item> convert(Transaction transaction) {
