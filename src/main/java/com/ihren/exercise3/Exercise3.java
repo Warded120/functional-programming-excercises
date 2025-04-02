@@ -2,15 +2,14 @@ package com.ihren.exercise3;
 
 import com.ihren.exercise3.models.Item;
 import io.vavr.control.Try;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
 public class Exercise3 {
-    public static final int ID_UPPER_BOUND = 7;
-    public static final int ID_LOWER_BOUND = 2;
-    private final String SOME_WRONG_TYPE = "SOME_WRONG_TYPE";
+    private static final int ID_UPPER_BOUND = 7;
+    private static final int ID_LOWER_BOUND = 2;
+    private static final String SOME_WRONG_TYPE = "SOME_WRONG_TYPE";
 //    public List<Item> filter(List<Item> items) {
 //        return items.stream()
 //                .filter(item -> !SomeWrongType.contentEquals(item.getType()))

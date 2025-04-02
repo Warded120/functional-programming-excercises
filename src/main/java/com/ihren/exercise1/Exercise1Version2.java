@@ -1,28 +1,29 @@
 package com.ihren.exercise1;
 
-import com.ihren.exercise1.abstraction.Excersice1;
+import com.ihren.exercise1.abstraction.Exercise1;
+import java.util.Comparator;
+import java.util.List;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
 
-import java.util.*;
+public class Exercise1Version2 extends Exercise1 {
 
-import static java.util.Map.Entry.comparingByValue;
-
-public class Exercise1Version2 extends Excersice1 {
-    // returns hashtags sorted by count without specifying, how many times it was used in text
-    public List<String> collectTweets(List<String> tweets) {
-        Map<String, Long> collected = findTweets(tweets);
-
-        List<String> sorted = collected.entrySet().stream()
-                .sorted(comparingByValue(Comparator.reverseOrder()))
-                .map(Map.Entry::getKey)
-                .collect(ArrayList::new,
-                        ArrayList::add,
-                        ArrayList::addAll);
-
-        //sorted.forEach(System.out::println);
-        return sorted;
+    /**
+     * alternative method with specifying tweets count in a result.<br>
+     * to see primary method see {@link Exercise1Version1}
+     */
+    public Map<String, Long> collectTweets(List<String> tweets) {
+        return findTweets(tweets).entrySet().stream()
+                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        Map.Entry::getValue,
+                        (e1, e2) -> e1,
+                        LinkedHashMap::new
+                ));
     }
 }
-
 
 
 

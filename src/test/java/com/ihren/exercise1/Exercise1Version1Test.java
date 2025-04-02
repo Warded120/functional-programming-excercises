@@ -1,83 +1,83 @@
 package com.ihren.exercise1;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
-
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 class Exercise1Version1Test {
-
-    public static final List<String> tweets = List.of(
-            "#Java and #Scala play a key role in AI and cognitive computing. IBM believes the future lies in cognitive technology.",
-            "Here's an update on IBM’s backing of #Scala and Lightbend: http8/ibm-lightbend-partnership-enterprise",
-            "IBM teams up with @lightbend to create a unified platform for #Java and #Scala #cognitive application development with tag #ChallengeEveryDay."
-    );
-
-    Exercise1Version1 exercise1Version1 = new Exercise1Version1();
+    private final Exercise1Version1 exercise1Version1 = new Exercise1Version1();
 
     @Test
-    void collectTweetsShouldReturnSortedTweetsByCountTest() {
+    @DisplayName("Should return a sorted tweet list by count")
+    void collectTweetsReturnsSortedList() {
         //given
-        LinkedHashMap<String, Long> expected = new LinkedHashMap<>();
-        expected.put("#Scala", 3L);
-        expected.put("#Java", 2L);
-        expected.put("#ChallengeEveryDay", 1L);
-        expected.put("#cognitive", 1L);
+        List<String> tweets = List.of(
+                "#Java and #Scala play a key role in AI and cognitive computing. IBM believes the future lies in cognitive technology.",
+                "Here's an update on IBM’s backing of #Scala and Lightbend: http8/ibm-lightbend-partnership-enterprise",
+                "IBM teams up with @lightbend to create a unified platform for #Java and #Scala #cognitive application development with tag #ChallengeEveryDay."
+        );
+        List<String> expected = List.of(
+                "#Scala",
+                "#Java",
+                "#ChallengeEveryDay",
+                "#cognitive"
+        );
 
         //when
-        LinkedHashMap<String, Long> actual = (LinkedHashMap<String, Long>) exercise1Version1.collectTweets(tweets);
+        List<String> actual = exercise1Version1.collectTweets(tweets);
 
         //then
-        assertEquals(expected.size(), actual.size(), "Map sizes are different");
-
-        Iterator<Map.Entry<String, Long>> expectedIterator = expected.entrySet().iterator();
-        Iterator<Map.Entry<String, Long>> actualIterator = actual.entrySet().iterator();
-
-        while (expectedIterator.hasNext() && actualIterator.hasNext()) {
-            Map.Entry<String, Long> expectedEntry = expectedIterator.next();
-            Map.Entry<String, Long> actualEntry = actualIterator.next();
-
-            assertEquals(expectedEntry, actualEntry, "Maps' elements are different");
-        }
+        assertEquals(expected, actual);
     }
 
     @Test
-    void collectTweetsShouldFailWhenTweetsNotSortedByCountTest() {
+    @DisplayName("Should return false when the tweet list is unsorted")
+    void collectTweetsReturnsFalseForUnsortedList() {
         //given
-        LinkedHashMap<String, Long> expected = new LinkedHashMap<>();
-        expected.put("#Java", 2L);
-        expected.put("#ChallengeEveryDay", 1L);
-        expected.put("#cognitive", 1L);
-        expected.put("#Scala", 3L);
+        List<String> tweets = List.of(
+                "#Java and #Scala play a key role in AI and cognitive computing. IBM believes the future lies in cognitive technology.",
+                "Here's an update on IBM’s backing of #Scala and Lightbend: http8/ibm-lightbend-partnership-enterprise",
+                "IBM teams up with @lightbend to create a unified platform for #Java and #Scala #cognitive application development with tag #ChallengeEveryDay."
+        );
+        List<String> expected = List.of(
+                "#ChallengeEveryDay",
+                "#Java",
+                "#Scala",
+                "#cognitive"
+        );
 
         //when
-        LinkedHashMap<String, Long> actual = (LinkedHashMap<String, Long>) exercise1Version1.collectTweets(tweets);
+        List<String> actual = exercise1Version1.collectTweets(tweets);
 
         //then
-        assertEquals(expected.size(), actual.size(), "Map sizes are different");
-
-        Iterator<Map.Entry<String, Long>> expectedIterator = expected.entrySet().iterator();
-        Iterator<Map.Entry<String, Long>> actualIterator = actual.entrySet().iterator();
-        boolean linkedHashMapOrdered = true;
-
-        while (expectedIterator.hasNext() && actualIterator.hasNext()) {
-            Map.Entry<String, Long> expectedEntry = expectedIterator.next();
-            Map.Entry<String, Long> actualEntry = actualIterator.next();
-
-            if(!expectedEntry.equals(actualEntry)) {
-                linkedHashMapOrdered = false;
-            }
-        }
-        assertFalse(linkedHashMapOrdered);
+        assertNotEquals(expected, actual);
     }
 
     @Test
-    void collectTweetsShouldReturnEmptyMapWhenTweetsIsNull() {
-        assertEquals(Map.of(), exercise1Version1.collectTweets(null));
+    @DisplayName("Should return an empty list when tweets are null")
+    void collectTweetsReturnsEmptyListForNullTweets() {
+        //when
+        assertEquals(List.of(), exercise1Version1.collectTweets(null));
+    }
+
+    @Test
+    @DisplayName("Should return an empty list when no tweets are found")
+    void collectTweetsReturnsEmptyListForNoTweets() {
+        //given
+        List<String> tweets = List.of(
+                "Java and Scala play a key role in AI and cognitive computing. IBM believes the future lies in cognitive technology.",
+                "Here's an update on IBM’s backing of Scala and Lightbend: http8/ibm-lightbend-partnership-enterprise",
+                "IBM teams up with @lightbend to create a unified platform for Java and Scala cognitive application development with tag ChallengeEveryDay."
+        );
+        List<String> expected = List.of();
+
+        //when
+        List<String> actual = exercise1Version1.collectTweets(tweets);
+
+        //then
+        assertEquals(expected, actual);
     }
 }

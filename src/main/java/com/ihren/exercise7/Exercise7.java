@@ -1,11 +1,10 @@
 package com.ihren.exercise7;
 
-import com.ihren.exercise7.models.*;
-
-import java.util.*;
+import com.ihren.exercise7.models.Item;
+import com.ihren.exercise7.models.Action;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
-
-import static com.ihren.exercise7.models.Action.SKIPPED;
 
 public class Exercise7 {
 //    public List<Item> filter(List<Item> items) {
@@ -41,6 +40,18 @@ public class Exercise7 {
 //    }
 
     public List<Item> filter(List<Item> items) {
+        List<Long> parentIds = Stream.ofNullable(items)
+                .flatMap(List::stream)
+                .filter(item ->
+                        Optional.ofNullable(item.isCancelled())
+                                .filter(Boolean.TRUE::equals)
+                                .flatMap(flag -> Optional.ofNullable(item.parentId()))
+                                .isPresent()
+                )
+                .map(Item::parentId)
+                .distinct()
+                .toList();
+
         return Stream.ofNullable(items)
                 .flatMap(List::stream)
                 .filter(item ->
@@ -52,9 +63,12 @@ public class Exercise7 {
                             .filter(pId -> Optional.ofNullable(item.id()).equals(pId))
                             .isPresent() ||
                         Optional.ofNullable(item.action())
-                            .filter(action -> action.equals(SKIPPED))
+                            .filter(action -> action.equals(Action.SKIPPED))
                             .isPresent() ||
                         Optional.ofNullable(item.returnReason())
+                            .isPresent() ||
+                        Optional.ofNullable(item.id())
+                            .filter(parentIds::contains)
                             .isPresent()
                     )
                 )

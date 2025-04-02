@@ -7,7 +7,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public abstract class Excersice1 {
+public abstract class Exercise1 {
     protected Map<String, Long> findTweets(List<String> tweets) {
         return Stream.ofNullable(tweets)
                 .flatMap(List::stream)

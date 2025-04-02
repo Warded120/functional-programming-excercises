@@ -1,7 +1,6 @@
 package com.ihren.exercise6;
 
-import com.ihren.exercise6.models.*;
-
+import com.ihren.exercise6.models.Item;
 import java.util.Optional;
 
 public class Exercise6 {
@@ -21,19 +20,12 @@ public class Exercise6 {
     public boolean filter(Item item) {
         return  Optional.ofNullable(item)
                     .map(Item::type)
+                    .filter(type -> type.equalsIgnoreCase(SOME_TYPE))
                     .map(type -> type.equalsIgnoreCase(SOME_TYPE))
                     .or(() ->
                             Optional.ofNullable(item)
                             .map(Item::isExist)
                     )
                     .orElse(false);
-    }
-
-    // second variant of method, where item parameter is not null safe (as in base method)
-    public boolean filterWithoutItemNullHandling(Item item) {
-        return  Optional.ofNullable(item.type())
-                .filter(type -> type.equalsIgnoreCase(SOME_TYPE))
-                .isPresent() ||
-                Optional.ofNullable(item.isExist()).orElse(false);
     }
 }

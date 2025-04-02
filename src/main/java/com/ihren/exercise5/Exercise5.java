@@ -1,9 +1,10 @@
 package com.ihren.exercise5;
 
-import com.ihren.exercise5.models.*;
-
-import java.util.ArrayList;
+import com.ihren.exercise5.models.Item;
+import com.ihren.exercise5.models.Sale;
+import com.ihren.exercise5.models.Transaction;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -45,8 +46,6 @@ public class Exercise5 {
 
     private final String someType = "SOME_TYPE";
 
-
-    // tried to avoid && and || operators as much as possible
     public List<Item> convert(Transaction transaction) {
         return Stream.ofNullable(transaction)
                 .map(Transaction::items)
@@ -66,6 +65,7 @@ public class Exercise5 {
                                 .isPresent()
                 )
                 .map(this::createItem)
+                .filter(Objects::nonNull)
                 .toList();
     }
 

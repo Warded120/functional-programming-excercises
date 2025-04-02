@@ -4,7 +4,6 @@ import com.ihren.exercise2.models.Element;
 import com.ihren.exercise2.models.Item;
 import com.ihren.exercise2.models.Transaction;
 import com.ihren.exercise2.models.CustomerCommonData;
-
 import java.util.Optional;
 
 public class Exercise2 {
@@ -29,10 +28,8 @@ public class Exercise2 {
                 .map(Transaction::item)
                 .map(Item::element)
                 .map(Element::id)
-                .flatMap(id ->
-                        Optional.ofNullable(customerCommonData.id())
-                        .map(Object::toString)
-                )
+                .map(id -> customerCommonData.id())
+                .map(Object::toString)
                 .orElse(null);
     }
 }

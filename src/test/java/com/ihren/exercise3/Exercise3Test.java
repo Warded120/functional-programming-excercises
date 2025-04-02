@@ -2,49 +2,58 @@ package com.ihren.exercise3;
 
 import com.ihren.exercise3.models.Element;
 import com.ihren.exercise3.models.Item;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
-
+import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
 
+@ExtendWith(MockitoExtension.class)
 class Exercise3Test {
 
     @Spy
     @InjectMocks
     private Exercise3 exercise3;
 
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
+    @Test
+    @DisplayName("Should return empty list when items is null")
+    void filterReturnsEmptyListWhenItemsIsNull() {
+        //when
+        assertEquals(List.of(), exercise3.filter(null));
     }
 
     @Test
-    void filterShouldReturnListOfItemsTest() {
+    @DisplayName("Should return empty list when items is empty")
+    void filterReturnsEmptyListWhenItemsIsEmpty() {
+        //when
+        assertEquals(List.of(), exercise3.filter(List.of()));
+    }
+
+    @Test
+    @DisplayName("Should return list of items")
+    void filterReturnsListOfItems() {
         //given
-        List<Item> expected = List.of(
-                new Item(
-                        "typeB",
-                        new Element("2"),
-                        "b"
-                ),
-                new Item(
-                        "typeC",
-                        new Element("3"),
-                        "c"
-                ),
-                new Item(
-                        "typeD",
-                        new Element("4"),
-                        "d"
-                )
-        );
+        List<Item> items =
+                List.of(
+                    new Item("typeA", new Element("1"), "a"),
+                    new Item("typeB", new Element("2"), "b"),
+                    new Item("typeC", new Element("3"), "c"),
+                    new Item("typeD", new Element("4"), "d"),
+                    new Item("someWrongContent", new Element("notANumber"), "e")
+                );
+        List<Item> expected = 
+                List.of(
+                    new Item("typeB", new Element("2"), "b"),
+                    new Item("typeC", new Element("3"), "c"),
+                    new Item("typeD", new Element("4"), "d")
+        );  
         doReturn("1").when(exercise3).getElementId("a");
         doReturn("2").when(exercise3).getElementId("b");
         doReturn("3").when(exercise3).getElementId("c");
@@ -53,12 +62,31 @@ class Exercise3Test {
 
         //when
         //then
-        List<Item> actual = assertDoesNotThrow(() -> exercise3.filter(ModelUtils.ITEMS));
+        List<Item> actual = exercise3.filter(items);
         assertEquals(expected, actual);
     }
 
     @Test
-    void filterShouldThrowNullPointerExceptionWhenTransactionIdNotFound() {
+    @DisplayName("Should return empty list when getElementId returns null")
+    void filterReturnsEmptyListWhenGetElementIdReturnsNull() {
+        //given
+        List<Item> items =
+                List.of(
+                        new Item("typeA", new Element("1"), "a")
+                );
+        List<Item> expected =
+                List.of();
+
+        doReturn(null).when(exercise3).getElementId("a");
+
+        //when
+        List<Item> actual = exercise3.filter(items);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    @DisplayName("Should throw NullPointerException when transaction ID is not found")
+    void filterThrowsNullPointerExceptionWhenTransactionIdNotFound() {
         //given
         List<Item> nonexistentTransactionId = List.of(
                     new Item("typeA",
@@ -72,10 +100,5 @@ class Exercise3Test {
         //when
         //then
         assertThrows(NullPointerException.class, () -> exercise3.filter(nonexistentTransactionId));
-    }
-
-    @Test
-    void filterShouldReturnEmptyListWhenItemsIsNull() {
-        assertEquals(List.of(), exercise3.filter(null));
     }
 }

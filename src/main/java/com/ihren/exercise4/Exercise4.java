@@ -4,8 +4,8 @@ import com.ihren.exercise4.models.DateTimeUtils;
 import com.ihren.exercise4.models.ElementMapper;
 import com.ihren.exercise4.models.Item;
 import com.ihren.exercise4.models.Transaction;
-
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -27,14 +27,16 @@ public class Exercise4 {
 //    }
 
     public List<Item> convert(Transaction transaction) {
-        return Stream.ofNullable(transaction)
+        return Optional.ofNullable(transaction)
                 .map(Transaction::items)
+                .stream()
                 .flatMap(List::stream)
+                .filter(Objects::nonNull)
                 .filter(item ->
-                    Optional.ofNullable(item)
-                        .flatMap(itemOpt -> Optional.ofNullable(itemOpt.startDateTime()))
+                    Optional.of(item)
+                        .map(Item::startDateTime)
                         .flatMap(localDateTime -> Optional.ofNullable(item.element()))
-                        .map(ElementMapper::map)
+                        .flatMap(ElementMapper::map)
                         .map(element -> {
                             Optional.ofNullable(item.startDateTime())
                                 .ifPresent(startDateTime ->
@@ -46,27 +48,4 @@ public class Exercise4 {
                 )
                 .toList();
     }
-
-//    public List<Item> convert0(Transaction transaction) {
-//        return Stream.ofNullable(transaction)
-//                .map(Transaction::items)
-//                .flatMap(List::stream)
-//                .filter(item ->
-//                        Optional.ofNullable(item)
-//                                .flatMap(itemOpt -> Optional.ofNullable(itemOpt.startDateTime()))
-//                                .flatMap(localDateTime -> Optional.ofNullable(item.element()))
-//                                .map(ElementMapper::map)
-//                                .ifPresent(element -> {
-//                                            Optional.ofNullable(item.startDateTime())
-//                                                    .ifPresent(startDateTime ->
-//                                                            item.element().setStartDateTime(DateTimeUtils.getInstant(startDateTime))
-//                                                    );
-//                                            return true;
-//                                        }
-//                                )
-//                )
-//
-//                .map()
-//                .toList();
-//    }
 }
