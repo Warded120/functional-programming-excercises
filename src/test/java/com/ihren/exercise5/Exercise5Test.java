@@ -28,13 +28,15 @@ class Exercise5Test {
     @InjectMocks
     private Exercise5 exercise5;
 
+    private static final String SOME_TYPE = "SOME_TYPE";
+
     @Test
     @DisplayName("Should return list of items when all filter functions return true")
     void convertReturnsListWhenAllFiltersTrue() {
         //given
         List<Item> items = List.of(
                 new Item(new Sale(), "Fuel1", new Return(), new Data("typeA")),
-                new Item(null, null, new Return(), new Data("SOME_TYPE")),
+                new Item(null, null, new Return(), new Data(SOME_TYPE)),
                 new Item(null, null, new Return(), new Data(null)),
                 new Item(null, null, new Return(), new Data("typeB")),
                 new Item(new Sale(), null, null, new Data("typeC")),
@@ -45,7 +47,7 @@ class Exercise5Test {
         Transaction transaction = new Transaction(items);
         List<Item> expected = List.of(
                 new Item(new Sale(), "Fuel1", new Return(), new Data("typeA")),
-                new Item(null, null, new Return(), new Data("SOME_TYPE")),
+                new Item(null, null, new Return(), new Data(SOME_TYPE)),
                 new Item(new Sale(), null, null, new Data("typeC")),
                 new Item(new Sale(), "Fuel2", new Return(), null),
                 new Item(null, "Fuel3", new Return(), null)
@@ -77,7 +79,7 @@ class Exercise5Test {
         //given
         List<Item> items = List.of(
                 new Item(new Sale(), "Fuel1", new Return(), new Data("typeA")),
-                new Item(null, null, new Return(), new Data("SOME_TYPE")),
+                new Item(null, null, new Return(), new Data(SOME_TYPE)),
                 new Item(null, null, new Return(), new Data("typeB")),
                 new Item(new Sale(), null, null, new Data("typeC")),
                 new Item(new Sale(), "Fuel4", new Return(), null),
@@ -102,7 +104,7 @@ class Exercise5Test {
         //given
         List<Item> items = List.of(
                 new Item(new Sale(), "Fuel1", new Return(), new Data("typeA")),
-                new Item(null, null, new Return(), new Data("SOME_TYPE")),
+                new Item(null, null, new Return(), new Data(SOME_TYPE)),
                 new Item(null, null, new Return(), new Data("typeB")),
                 new Item(new Sale(), null, null, new Data("typeC")),
                 new Item(new Sale(), "Fuel4", new Return(), null),
@@ -130,7 +132,7 @@ class Exercise5Test {
         //given
         List<Item> items = List.of(
                 new Item(new Sale(), "Fuel1", new Return(), new Data("typeA")),
-                new Item(null, null, new Return(), new Data("SOME_TYPE")),
+                new Item(null, null, new Return(), new Data(SOME_TYPE)),
                 new Item(null, null, new Return(), new Data("typeB")),
                 new Item(new Sale(), null, null, new Data("typeC")),
                 new Item(new Sale(), "Fuel4", new Return(), null),

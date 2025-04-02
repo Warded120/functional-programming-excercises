@@ -22,6 +22,10 @@ class Exercise3Test {
     @InjectMocks
     private Exercise3 exercise3;
 
+    private static final Integer ID_UPPER_BOUND = 7;
+    private static final Integer ID_LOWER_BOUND = 2;
+    private static final String SOME_WRONG_TYPE = "SOME_WRONG_TYPE";
+
     @Test
     @DisplayName("Should return empty list when items is null")
     void filterReturnsEmptyListWhenItemsIsNull() {
