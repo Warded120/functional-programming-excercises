@@ -8,6 +8,8 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class Exercise7Test {
 
@@ -17,21 +19,64 @@ class Exercise7Test {
     @DisplayName("Should return list of filtered items")
     void filterReturnsFilteredItems() {
         //given
-        List<Item> items = List.of(
-                new Item(1L, null, Boolean.TRUE, Action.ACTIVE, null),
-                new Item(2L, 7L, Boolean.TRUE, Action.CANCELED, null),
-                new Item(3L, 2L, Boolean.FALSE, null, "Customer changed mind"),
-                new Item(4L, null, Boolean.FALSE, Action.SKIPPED, null),
-                new Item(5L, 3L, null, Action.ACTIVE, null),
-                new Item(6L, 4L, null, Action.CANCELED, null),
-                new Item(null, null, null, null, null),
-                new Item(7L, null, null, null, null)
-        );
-        List<Item> expected = List.of(
-                new Item(5L, 3L, null, Action.ACTIVE, null),
-                new Item(6L, 4L, null, Action.CANCELED, null),
-                new Item(null, null, null, null, null)
-        );
+        Item item1 = mock(Item.class);
+        when(item1.id()).thenReturn(1L);
+        when(item1.parentId()).thenReturn(null);
+        when(item1.isCancelled()).thenReturn(Boolean.TRUE);
+        when(item1.action()).thenReturn(Action.ACTIVE);
+        when(item1.returnReason()).thenReturn(null);
+
+        Item item2 = mock(Item.class);
+        when(item2.id()).thenReturn(2L);
+        when(item2.parentId()).thenReturn(7L);
+        when(item2.isCancelled()).thenReturn(Boolean.TRUE);
+        when(item2.action()).thenReturn(Action.CANCELED);
+        when(item2.returnReason()).thenReturn(null);
+
+        Item item3 = mock(Item.class);
+        when(item3.id()).thenReturn(3L);
+        when(item3.parentId()).thenReturn(2L);
+        when(item3.isCancelled()).thenReturn(Boolean.FALSE);
+        when(item3.action()).thenReturn(null);
+        when(item3.returnReason()).thenReturn("Customer changed mind");
+
+        Item item4 = mock(Item.class);
+        when(item4.id()).thenReturn(4L);
+        when(item4.parentId()).thenReturn(null);
+        when(item4.isCancelled()).thenReturn(Boolean.FALSE);
+        when(item4.action()).thenReturn(Action.SKIPPED);
+        when(item4.returnReason()).thenReturn(null);
+
+        Item item5 = mock(Item.class);
+        when(item5.id()).thenReturn(5L);
+        when(item5.parentId()).thenReturn(3L);
+        when(item5.isCancelled()).thenReturn(null);
+        when(item5.action()).thenReturn(Action.ACTIVE);
+        when(item5.returnReason()).thenReturn(null);
+
+        Item item6 = mock(Item.class);
+        when(item6.id()).thenReturn(6L);
+        when(item6.parentId()).thenReturn(4L);
+        when(item6.isCancelled()).thenReturn(null);
+        when(item6.action()).thenReturn(Action.CANCELED);
+        when(item6.returnReason()).thenReturn(null);
+
+        Item item7 = mock(Item.class);
+        when(item7.id()).thenReturn(null);
+        when(item7.parentId()).thenReturn(null);
+        when(item7.isCancelled()).thenReturn(null);
+        when(item7.action()).thenReturn(null);
+        when(item7.returnReason()).thenReturn(null);
+
+        Item item8 = mock(Item.class);
+        when(item8.id()).thenReturn(7L);
+        when(item8.parentId()).thenReturn(null);
+        when(item8.isCancelled()).thenReturn(null);
+        when(item8.action()).thenReturn(null);
+        when(item8.returnReason()).thenReturn(null);
+
+        List<Item> items = List.of(item1, item2, item3, item4, item5, item6, item7, item8);
+        List<Item> expected = List.of(item5, item6, item7);
 
         //when
         List<Item> actual = exercise7.filter(items);

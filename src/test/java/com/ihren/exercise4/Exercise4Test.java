@@ -18,7 +18,9 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.mockStatic;
+import static org.mockito.Mockito.when;
 
 class Exercise4Test {
 
@@ -45,23 +47,48 @@ class Exercise4Test {
         //given
         Instant INSTANT = Instant.now();
         LocalDateTime DATE_TIME = LocalDateTime.now();
+
+        Element element3 = mock(Element.class);
+        when(element3.getStartDateTime()).thenReturn(null);
+
+        Element element4 = mock(Element.class);
+        when(element4.getStartDateTime()).thenReturn(null);
+
+        Element element5 = mock(Element.class);
+        when(element5.getStartDateTime()).thenReturn(INSTANT);
+
+        Element element6 = mock(Element.class);
+        when(element6.getStartDateTime()).thenReturn(INSTANT);
+
+        Item item1 = mock(Item.class);
+        when(item1.element()).thenReturn(null);
+        when(item1.startDateTime()).thenReturn(null);
+
+        Item item2 = mock(Item.class);
+        when(item2.element()).thenReturn(null);
+        when(item2.startDateTime()).thenReturn(DATE_TIME);
+
+        Item item3 = mock(Item.class);
+        when(item3.element()).thenReturn(element3);
+        when(item3.startDateTime()).thenReturn(DATE_TIME);
+
+        Item item4 = mock(Item.class);
+        when(item4.element()).thenReturn(element4);
+        when(item4.startDateTime()).thenReturn(null);
+
+        Item item5 = mock(Item.class);
+        when(item5.element()).thenReturn(element5);
+        when(item5.startDateTime()).thenReturn(DATE_TIME);
+
+        Item item6 = mock(Item.class);
+        when(item6.element()).thenReturn(element6);
+        when(item6.startDateTime()).thenReturn(DATE_TIME);
+
         Transaction transaction = new Transaction(
-                Stream.of(
-                                null,
-                                new Item(null, null),
-                                new Item(null, DATE_TIME),
-                                new Item(new Element(null), DATE_TIME),
-                                new Item(new Element(null), null),
-                                new Item(new Element(INSTANT), DATE_TIME),
-                                new Item(new Element(INSTANT), DATE_TIME)
-                        )
-                        .toList()
+                Stream.of(null, item1, item2, item3, item4, item5, item6)
+                .toList()
         );
-        List<Item> expected = List.of(
-                new Item(new Element(INSTANT), DATE_TIME),
-                new Item(new Element(INSTANT), DATE_TIME),
-                new Item(new Element(INSTANT), DATE_TIME)
-        );
+        List<Item> expected = List.of(item3, item5, item6);
 
         mockedStaticDtu.when(() -> DateTimeUtils.getInstant(DATE_TIME))
                 .thenReturn(INSTANT);
@@ -81,9 +108,17 @@ class Exercise4Test {
         //given
         Instant INSTANT = Instant.now();
         LocalDateTime DATE_TIME = LocalDateTime.now();
-        Transaction transaction = new Transaction(
-                List.of(new Item(new Element(INSTANT), DATE_TIME))
-        );
+
+        Element element1 = mock(Element.class);
+        when(element1.getStartDateTime()).thenReturn(INSTANT);
+
+        Item item1 = mock(Item.class);
+        when(item1.element()).thenReturn(element1);
+        when(item1.startDateTime()).thenReturn(DATE_TIME);
+
+        Transaction transaction1 = mock(Transaction.class);
+        when(transaction1.items()).thenReturn(List.of(item1));
+
         List<Item> expected = List.of();
 
         mockedStaticDtu.when(() -> DateTimeUtils.getInstant(DATE_TIME))
@@ -92,7 +127,7 @@ class Exercise4Test {
                 .thenReturn(Optional.empty());
 
         //when
-        List<Item> actual = exercise4.convert(transaction);
+        List<Item> actual = exercise4.convert(transaction1);
 
         //then
         assertEquals(expected, actual);
@@ -104,12 +139,20 @@ class Exercise4Test {
         //given
         Instant INSTANT = Instant.now();
         LocalDateTime DATE_TIME = LocalDateTime.now();
-        Transaction transaction = new Transaction(
-                List.of(new Item(new Element(INSTANT), DATE_TIME))
-        );
-        List<Item> expected = List.of(
-                new Item(new Element(null), DATE_TIME)
-        );
+
+        Element element1 = mock(Element.class);
+        when(element1.getStartDateTime()).thenReturn(INSTANT);
+        when(element1.getStartDateTime()).thenReturn(null);
+
+        Item item1 = mock(Item.class);
+        when(item1.element()).thenReturn(element1);
+        when(item1.startDateTime()).thenReturn(DATE_TIME);
+
+        Transaction transaction1 = mock(Transaction.class);
+        when(transaction1.items()).thenReturn(List.of(item1));
+
+
+        List<Item> expected = List.of(item1);
 
         mockedStaticDtu.when(() -> DateTimeUtils.getInstant(null))
                 .thenReturn(INSTANT);
@@ -117,7 +160,7 @@ class Exercise4Test {
                 .thenAnswer(invocationOnMock -> Optional.ofNullable(invocationOnMock.getArgument(0)));
 
         //when
-        List<Item> actual = exercise4.convert(transaction);
+        List<Item> actual = exercise4.convert(transaction1);
 
         //then
         assertEquals(expected, actual);
@@ -138,8 +181,10 @@ class Exercise4Test {
     @DisplayName("Should return empty list when items is null")
     void convertReturnsEmptyListWhenItemsIsNull() {
         //given
+        Transaction transaction1 = mock(Transaction.class);
+        when(transaction1.items()).thenReturn(null);
         //when
-        List<Item> actual = exercise4.convert(new Transaction(null));
+        List<Item> actual = exercise4.convert(transaction1);
 
         //then
         assertEquals(List.of(), actual);
@@ -149,8 +194,11 @@ class Exercise4Test {
     @DisplayName("Should return empty list when items is empty")
     void convertReturnsEmptyListWhenItemsIsEmpty() {
         //given
+        Transaction transaction1 = mock(Transaction.class);
+        when(transaction1.items()).thenReturn(List.of());
+
         //when
-        List<Item> actual = exercise4.convert(new Transaction(List.of()));
+        List<Item> actual = exercise4.convert(transaction1);
 
         //then
         assertEquals(List.of(), actual);

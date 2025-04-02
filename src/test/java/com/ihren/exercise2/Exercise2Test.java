@@ -13,6 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -29,13 +30,15 @@ class Exercise2Test {
     @DisplayName("Should return CustomerCommonData id when everything is initialized")
     void getIdReturnsCustomerCommonDataIdWhenInitialized() {
         //given
-        Transaction transaction = new Transaction(
-                "something",
-                new Item(
-                        "something",
-                        new Element("a")
-                )
-        );
+        Element element = mock(Element.class);
+        when(element.id()).thenReturn("a");
+
+        Item item = mock(Item.class);
+        when(item.element()).thenReturn(element);
+
+        Transaction transaction = mock(Transaction.class);
+        when(transaction.item()).thenReturn(item);
+
         String expected = "1";
         Long mockLong = 1L;
 
@@ -59,7 +62,8 @@ class Exercise2Test {
     @DisplayName("Should return null when item is null")
     void getIdReturnsNullWhenItemIsNull() {
         //given
-        Transaction transaction = new Transaction("something", null);
+        Transaction transaction = mock(Transaction.class);
+        when(transaction.item()).thenReturn(null);
 
         //when
         //then
@@ -70,13 +74,11 @@ class Exercise2Test {
     @DisplayName("Should return null when element is null")
     void getIdReturnsNullWhenElementIsNull() {
         //given
-        Transaction transaction = new Transaction(
-                "something",
-                new Item(
-                        "something",
-                        null
-                )
-        );
+        Item item = mock(Item.class);
+        when(item.element()).thenReturn(null);
+
+        Transaction transaction = mock(Transaction.class);
+        when(transaction.item()).thenReturn(item);
 
         //when
         String actual = exercise2.getId(transaction);
@@ -89,13 +91,14 @@ class Exercise2Test {
     @DisplayName("Should return null when element id is null")
     void getIdReturnsNullWhenElementIdIsNull() {
         //given
-        Transaction transaction = new Transaction(
-                "something",
-                new Item(
-                        "something",
-                        new Element(null)
-                )
-        );
+        Element element = mock(Element.class);
+        when(element.id()).thenReturn(null);
+
+        Item item = mock(Item.class);
+        when(item.element()).thenReturn(element);
+
+        Transaction transaction = mock(Transaction.class);
+        when(transaction.item()).thenReturn(item);
 
         //when
         String actual = exercise2.getId(transaction);
@@ -108,13 +111,14 @@ class Exercise2Test {
     @DisplayName("Should return null when CustomerCommonData is null")
     void getIdReturnsNullWhenCustomerCommonDataIsNull() {
         //given
-        Transaction transaction = new Transaction(
-                "something",
-                new Item(
-                        "something",
-                        new Element("a")
-                )
-        );
+        Element element = mock(Element.class);
+        when(element.id()).thenReturn("a");
+
+        Item item = mock(Item.class);
+        when(item.element()).thenReturn(element);
+
+        Transaction transaction = mock(Transaction.class);
+        when(transaction.item()).thenReturn(item);
 
         when(customerCommonData.id()).thenReturn(null);
 

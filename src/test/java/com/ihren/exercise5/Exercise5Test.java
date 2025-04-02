@@ -18,8 +18,10 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class Exercise5Test {
@@ -34,24 +36,61 @@ class Exercise5Test {
     @DisplayName("Should return list of items when all filter functions return true")
     void convertReturnsListWhenAllFiltersTrue() {
         //given
-        List<Item> items = List.of(
-                new Item(new Sale(), "Fuel1", new Return(), new Data("typeA")),
-                new Item(null, null, new Return(), new Data(SOME_TYPE)),
-                new Item(null, null, new Return(), new Data(null)),
-                new Item(null, null, new Return(), new Data("typeB")),
-                new Item(new Sale(), null, null, new Data("typeC")),
-                new Item(new Sale(), "Fuel2", new Return(), null),
-                new Item(null, "Fuel3", new Return(), null),
-                new Item(null, null, null, null)
-        );
-        Transaction transaction = new Transaction(items);
-        List<Item> expected = List.of(
-                new Item(new Sale(), "Fuel1", new Return(), new Data("typeA")),
-                new Item(null, null, new Return(), new Data(SOME_TYPE)),
-                new Item(new Sale(), null, null, new Data("typeC")),
-                new Item(new Sale(), "Fuel2", new Return(), null),
-                new Item(null, "Fuel3", new Return(), null)
-        );
+        Sale sale = mock(Sale.class);
+        Return returnMock = mock(Return.class);
+
+        Data data2 = mock(Data.class);
+        when(data2.type()).thenReturn(SOME_TYPE);
+
+        Data data3 = mock(Data.class);
+        when(data3.type()).thenReturn(null);
+
+        Data data4 = mock(Data.class);
+        when(data4.type()).thenReturn("typeB");
+
+        Item item1 = mock(Item.class);
+        when(item1.sale()).thenReturn(sale);
+
+        Item item2 = mock(Item.class);
+        when(item2.sale()).thenReturn(null);
+        when(item2.aReturn()).thenReturn(returnMock);
+        when(item2.data()).thenReturn(data2);
+
+        Item item3 = mock(Item.class);
+        when(item3.sale()).thenReturn(null);
+        when(item3.fuelSale()).thenReturn(null);
+        when(item3.aReturn()).thenReturn(returnMock);
+        when(item3.data()).thenReturn(data3);
+
+        Item item4 = mock(Item.class);
+        when(item4.sale()).thenReturn(null);
+        when(item4.fuelSale()).thenReturn(null);
+        when(item4.aReturn()).thenReturn(returnMock);
+        when(item4.data()).thenReturn(data4);
+
+        Item item5 = mock(Item.class);
+        when(item5.sale()).thenReturn(sale);
+
+        Item item6 = mock(Item.class);
+        when(item6.sale()).thenReturn(sale);
+
+        Item item7 = mock(Item.class);
+        when(item7.sale()).thenReturn(null);
+        when(item7.fuelSale()).thenReturn("Fuel3");
+        when(item7.aReturn()).thenReturn(returnMock);
+        when(item7.data()).thenReturn(null);
+
+        Item item8 = mock(Item.class);
+        when(item8.sale()).thenReturn(null);
+        when(item8.fuelSale()).thenReturn(null);
+        when(item8.aReturn()).thenReturn(null);
+
+        List<Item> items = List.of(item1, item2, item3, item4, item5, item6, item7, item8);
+
+        Transaction transaction = mock(Transaction.class);
+        when(transaction.items()).thenReturn(items);
+
+        List<Item> expected = List.of(item1, item2, item5, item6, item7);
 
         doReturn(items).when(exercise5).filterItems(anyList());
         doReturn(true).when(exercise5).filterSale(any(Sale.class));
@@ -77,16 +116,11 @@ class Exercise5Test {
     @DisplayName("Should return list of items when filter items return empty list")
     void convertReturnsListWhenFilterItemsEmpty() {
         //given
-        List<Item> items = List.of(
-                new Item(new Sale(), "Fuel1", new Return(), new Data("typeA")),
-                new Item(null, null, new Return(), new Data(SOME_TYPE)),
-                new Item(null, null, new Return(), new Data("typeB")),
-                new Item(new Sale(), null, null, new Data("typeC")),
-                new Item(new Sale(), "Fuel4", new Return(), null),
-                new Item(null, "Fuel4", new Return(), null),
-                new Item(null, null, null, null)
-        );
-        Transaction transaction = new Transaction(items);
+        Item item1 = mock(Item.class);
+        List<Item> items = List.of(item1, item1, item1, item1, item1, item1, item1);
+
+        Transaction transaction = mock(Transaction.class);
+        when(transaction.items()).thenReturn(items);
         int expectedItemCount = 0;
 
         doReturn(List.of()).when(exercise5).filterItems(anyList());
@@ -102,18 +136,63 @@ class Exercise5Test {
     @DisplayName("Should return list of items when filter sale returns false")
     void convertReturnsListWhenFilterSaleFalse() {
         //given
-        List<Item> items = List.of(
-                new Item(new Sale(), "Fuel1", new Return(), new Data("typeA")),
-                new Item(null, null, new Return(), new Data(SOME_TYPE)),
-                new Item(null, null, new Return(), new Data("typeB")),
-                new Item(new Sale(), null, null, new Data("typeC")),
-                new Item(new Sale(), "Fuel4", new Return(), null),
-                new Item(null, "Fuel4", new Return(), null),
-                new Item(null, null, null, null)
-        );
-        Transaction transaction = new Transaction(items);
+        Sale sale = mock(Sale.class);
+        Return aReturn = mock(Return.class);
+
+        Data data1 = mock(Data.class);
+        when(data1.type()).thenReturn("typeA");
+
+        Data data2 = mock(Data.class);
+        when(data2.type()).thenReturn(SOME_TYPE);
+
+        Data data3 = mock(Data.class);
+        when(data3.type()).thenReturn("typeB");
+
+        Item item1 = mock(Item.class);
+        when(item1.sale()).thenReturn(sale);
+        when(item1.fuelSale()).thenReturn("Fuel1");
+        when(item1.aReturn()).thenReturn(aReturn);
+        when(item1.data()).thenReturn(data1);
+
+        Item item2 = mock(Item.class);
+        when(item2.sale()).thenReturn(null);
+        when(item2.aReturn()).thenReturn(aReturn);
+        when(item2.data()).thenReturn(data2);
+
+        Item item3 = mock(Item.class);
+        when(item3.sale()).thenReturn(null);
+        when(item3.fuelSale()).thenReturn(null);
+        when(item3.aReturn()).thenReturn(aReturn);
+        when(item3.data()).thenReturn(data3);
+
+        Item item4 = mock(Item.class);
+        when(item4.sale()).thenReturn(sale);
+        when(item4.fuelSale()).thenReturn(null);
+        when(item4.aReturn()).thenReturn(null);
+
+        Item item5 = mock(Item.class);
+        when(item5.sale()).thenReturn(sale);
+        when(item5.fuelSale()).thenReturn("Fuel4");
+        when(item5.aReturn()).thenReturn(aReturn);
+        when(item5.data()).thenReturn(null);
+
+        Item item6 = mock(Item.class);
+        when(item6.sale()).thenReturn(null);
+        when(item6.fuelSale()).thenReturn("Fuel4");
+        when(item6.aReturn()).thenReturn(aReturn);
+        when(item6.data()).thenReturn(null);
+
+        Item item7 = mock(Item.class);
+        when(item7.sale()).thenReturn(null);
+        when(item7.fuelSale()).thenReturn(null);
+        when(item7.aReturn()).thenReturn(null);
+        List<Item> items = List.of(item1, item2, item3, item4, item5, item6, item7);
+
+        Transaction transaction = mock(Transaction.class);
+        when(transaction.items()).thenReturn(items);
+
         int expectedItemCount = 4;
-        Item dummyItem = new Item(new Sale(), "dummy", new Return(), new Data("dummy"));
+        Item dummyItem = mock(Item.class);
 
         doReturn(items).when(exercise5).filterItems(anyList());
         doReturn(false).when(exercise5).filterSale(any(Sale.class));
@@ -130,18 +209,45 @@ class Exercise5Test {
     @DisplayName("Should return list of items when is return transaction returns false")
     void convertReturnsListWhenIsReturnTransactionFalse() {
         //given
-        List<Item> items = List.of(
-                new Item(new Sale(), "Fuel1", new Return(), new Data("typeA")),
-                new Item(null, null, new Return(), new Data(SOME_TYPE)),
-                new Item(null, null, new Return(), new Data("typeB")),
-                new Item(new Sale(), null, null, new Data("typeC")),
-                new Item(new Sale(), "Fuel4", new Return(), null),
-                new Item(null, "Fuel4", new Return(), null),
-                new Item(null, null, null, null)
-        );
-        Transaction transaction = new Transaction(items);
+        Sale sale = mock(Sale.class);
+        Return returnMock = mock(Return.class);
+
+        Item item1 = mock(Item.class);
+        when(item1.sale()).thenReturn(sale);
+
+        Item item2 = mock(Item.class);
+        when(item2.sale()).thenReturn(null);
+        when(item2.fuelSale()).thenReturn(null);
+        when(item2.aReturn()).thenReturn(returnMock);
+
+        Item item3 = mock(Item.class);
+        when(item3.sale()).thenReturn(null);
+        when(item3.fuelSale()).thenReturn(null);
+        when(item3.aReturn()).thenReturn(returnMock);
+
+        Item item4 = mock(Item.class);
+        when(item4.sale()).thenReturn(sale);
+
+        Item item5 = mock(Item.class);
+        when(item5.sale()).thenReturn(sale);
+
+        Item item6 = mock(Item.class);
+        when(item6.sale()).thenReturn(null);
+        when(item6.fuelSale()).thenReturn("Fuel4");
+        when(item6.aReturn()).thenReturn(returnMock);
+
+        Item item7 = mock(Item.class);
+        when(item7.sale()).thenReturn(null);
+        when(item7.fuelSale()).thenReturn(null);
+        when(item7.aReturn()).thenReturn(null);
+
+        List<Item> items = List.of(item1, item2, item3, item4, item5, item6, item7);
+
+        Transaction transaction = mock(Transaction.class);
+        when(transaction.items()).thenReturn(items);
+
         int expectedItemCount = 4;
-        Item dummyItem = new Item(new Sale(), "dummy", new Return(), new Data("dummy"));
+        Item dummyItem = mock(Item.class);
 
         doReturn(items).when(exercise5).filterItems(anyList());
         doReturn(true).when(exercise5).filterSale(any(Sale.class));
@@ -166,11 +272,14 @@ class Exercise5Test {
     @DisplayName("Should return empty list when items is null")
     void convertReturnsEmptyListWhenItemsIsNull() {
         //given
+        Transaction transaction = mock(Transaction.class);
+        when(transaction.items()).thenReturn(null);
+
         doReturn(List.of()).when(exercise5).filterItems(null);
 
         //when
         //then
-        assertEquals(List.of(), exercise5.convert(new Transaction(null)));
+        assertEquals(List.of(), exercise5.convert(transaction));
     }
 
     //createItem return item\null
@@ -179,13 +288,19 @@ class Exercise5Test {
     @DisplayName("Should return empty list when create item returns null")
     void convertReturnsEmptyListWhenCreateItemNull() {
         //given
-        Item item = new Item(new Sale(), "Fuel1", new Return(), new Data("typeA"));
+        Sale sale = mock(Sale.class);
+        Item item = mock(Item.class);
+        when(item.sale()).thenReturn(sale);
+
         List<Item> items = List.of(item);
-        Transaction transaction = new Transaction(items);
+
+        Transaction transaction = mock(Transaction.class);
+        when(transaction.items()).thenReturn(items);
+
         List<Item> expected = List.of();
 
         doReturn(items).when(exercise5).filterItems(items);
-        doReturn(true).when(exercise5).filterSale(item.sale());
+        doReturn(true).when(exercise5).filterSale(sale);
         doReturn(null).when(exercise5).createItem(item);
 
         //when
@@ -195,7 +310,7 @@ class Exercise5Test {
         assertEquals(expected, actual);
 
         verify(exercise5).filterItems(items);
-        verify(exercise5).filterSale(item.sale());
+        verify(exercise5).filterSale(sale);
         verify(exercise5).createItem(item);
     }
 }
