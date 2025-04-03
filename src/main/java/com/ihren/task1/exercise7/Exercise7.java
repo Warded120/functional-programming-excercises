@@ -57,17 +57,17 @@ public class Exercise7 {
                 .filter(item ->
                     !(
                         Optional.ofNullable(item.isCancelled())
-                            .orElse(false) ||
-                        Optional.ofNullable(item.isCancelled())
+                            .orElse(false)
+                        || Optional.ofNullable(item.isCancelled())
                             .flatMap(isCancelled -> Optional.ofNullable(item.parentId()))
                             .filter(pId -> Optional.ofNullable(item.id()).equals(pId))
-                            .isPresent() ||
-                        Optional.ofNullable(item.action())
+                            .isPresent()
+                        || Optional.ofNullable(item.action())
                             .filter(action -> action.equals(Action.SKIPPED))
-                            .isPresent() ||
-                        Optional.ofNullable(item.returnReason())
-                            .isPresent() ||
-                        Optional.ofNullable(item.id())
+                            .isPresent()
+                        || Optional.ofNullable(item.returnReason())
+                            .isPresent()
+                        || Optional.ofNullable(item.id())
                             .filter(parentIds::contains)
                             .isPresent()
                     )

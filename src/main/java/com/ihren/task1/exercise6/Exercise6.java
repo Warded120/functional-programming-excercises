@@ -18,7 +18,7 @@ public class Exercise6 {
 //    }
 
     public boolean filter(Item item) {
-        return  Optional.ofNullable(item)
+        return Optional.ofNullable(item)
                     .map(Item::type)
                     .filter(type -> type.equalsIgnoreCase(SOME_TYPE))
                     .map(type -> type.equalsIgnoreCase(SOME_TYPE))
