@@ -54,14 +54,14 @@ public class Exercise5 {
                 .filter(item ->
                         Optional.ofNullable(item.sale())
                                 .filter(this::filterSale)
-                                .isPresent() ||
-                        Optional.ofNullable(item.aReturn())
+                                .isPresent()
+                        || Optional.ofNullable(item.aReturn())
                                 .filter(aReturn -> isReturnTransaction(transaction))
                                 .flatMap(aReturn -> Optional.ofNullable(item.data()))
                                 .flatMap(data -> Optional.ofNullable(data.type()))
                                 .filter(type -> type.equals(SOME_TYPE))
-                                .isPresent() ||
-                        Optional.ofNullable(item.fuelSale())
+                                .isPresent()
+                        || Optional.ofNullable(item.fuelSale())
                                 .isPresent()
                 )
                 .map(this::createItem)

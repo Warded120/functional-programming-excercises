@@ -2,6 +2,6 @@ package com.ihren.task1.exercise5.models;
 
 import java.util.List;
 
-public record Transaction (
+public record Transaction(
     List<Item> items
-) {}
+) { }
