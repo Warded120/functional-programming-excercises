@@ -25,12 +25,11 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class Exercise5Test {
+    private static final String SOME_TYPE = "SOME_TYPE";
 
     @Spy
     @InjectMocks
     private Exercise5 exercise5;
-
-    private static final String SOME_TYPE = "SOME_TYPE";
 
     @Test
     @DisplayName("Should return list of items when all filter functions return true")

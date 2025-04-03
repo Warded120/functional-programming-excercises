@@ -21,12 +21,12 @@ class Exercise6Test {
 
     private static Stream<Arguments> provideItemsAndExpectedResult() {
         return Stream.of(
-                Arguments.of(new Item("SOME_TYPE", null),       true),
-                Arguments.of(new Item(null, Boolean.TRUE),             true),
-                Arguments.of(new Item("NOT_SOME_TYPE", null),   false),
-                Arguments.of(new Item("NOT_SOME_TYPE", Boolean.TRUE),  true),
-                Arguments.of(new Item(null, null),              false),
-                Arguments.of(new Item(null, Boolean.FALSE),            false),
+            Arguments.of(new Item("SOME_TYPE", null), true),
+                Arguments.of(new Item(null, Boolean.TRUE), true),
+                Arguments.of(new Item("NOT_SOME_TYPE", null), false),
+                Arguments.of(new Item("NOT_SOME_TYPE", Boolean.TRUE), true),
+                Arguments.of(new Item(null, null), false),
+                Arguments.of(new Item(null, Boolean.FALSE), false),
                 Arguments.of(null, false)
         );
     }
