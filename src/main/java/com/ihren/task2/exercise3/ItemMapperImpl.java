@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
-import java.util.OptionalDouble;
 import java.util.stream.Stream;
 
 public class ItemMapperImpl implements ItemMapper {

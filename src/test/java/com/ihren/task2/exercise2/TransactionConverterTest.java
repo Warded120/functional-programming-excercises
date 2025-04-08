@@ -5,7 +5,6 @@ import com.ihren.task2.exercise2.mapper.TransactionMapper;
 import com.ihren.task2.exercise2.model.Element;
 import com.ihren.task2.exercise2.model.Item;
 import com.ihren.task2.exercise2.model.Transaction;
-import io.vavr.control.Try;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -14,12 +13,15 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import java.util.Map;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.BDDMockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willThrow;
+import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.mock;
 
 @ExtendWith(MockitoExtension.class)
 class TransactionConverterTest {

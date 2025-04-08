@@ -1,4 +1,4 @@
-package com.ihren.task2.exercise1.annotation;
+package com.ihren.task2.exercise6.annotation;
 
 public @interface Component {
 }

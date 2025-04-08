@@ -3,7 +3,7 @@ package com.ihren.task2.exercise1.exception;
 import com.ihren.task2.exercise1.constant.ErrorCode;
 
 public class ApplicationException extends RuntimeException {
-    private ErrorCode errorCode;
+    private final ErrorCode errorCode;
 
     public ApplicationException(String message) {
         super(message);

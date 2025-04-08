@@ -17,8 +17,17 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.BDDMockito.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
+import static org.mockito.BDDMockito.willDoNothing;
+import static org.mockito.BDDMockito.willThrow;
+import static org.mockito.Mockito.mock;
 
 @ExtendWith(MockitoExtension.class)
 class ExceptionHandlerTest {
@@ -49,7 +58,9 @@ class ExceptionHandlerTest {
         Try<E> tryOfExpected = Try.success(expected);
 
         Function<I, E> func = mock(Function.class);
+
         given(func.apply(input)).willReturn(expected);
+
         //when
         Try<E> actual = exceptionHandler.handle(func, input);
 

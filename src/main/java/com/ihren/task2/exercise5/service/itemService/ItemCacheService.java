@@ -1,8 +1,9 @@
-package com.ihren.task2.exercise5.service;
+package com.ihren.task2.exercise5.service.itemService;
 
 import com.ihren.task2.exercise5.annotation.Service;
 import com.ihren.task2.exercise5.cache.GenericCache;
 import com.ihren.task2.exercise5.model.ItemDocument;
+import com.ihren.task2.exercise5.service.sainService.SainService;
 import lombok.RequiredArgsConstructor;
 
 @Service("ItemService")
