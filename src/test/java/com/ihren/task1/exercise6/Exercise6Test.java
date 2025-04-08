@@ -1,7 +1,6 @@
 package com.ihren.task1.exercise6;
 
 import com.ihren.task1.exercise6.models.Item;
-import com.ihren.task1.exercise6.Exercise6;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;

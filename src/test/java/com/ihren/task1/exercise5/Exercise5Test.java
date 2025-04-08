@@ -1,6 +1,5 @@
 package com.ihren.task1.exercise5;
 
-import com.ihren.task1.exercise5.Exercise5;
 import com.ihren.task1.exercise5.models.Data;
 import com.ihren.task1.exercise5.models.Item;
 import com.ihren.task1.exercise5.models.Return;

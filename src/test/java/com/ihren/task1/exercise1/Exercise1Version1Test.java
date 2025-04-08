@@ -1,6 +1,5 @@
 package com.ihren.task1.exercise1;
 
-import com.ihren.task1.exercise1.Exercise1Version1;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import java.util.List;
