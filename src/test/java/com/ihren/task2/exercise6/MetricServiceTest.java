@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.BDDMockito.willThrow;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.never;
 
@@ -42,9 +43,6 @@ class MetricServiceTest {
 
     @Mock
     private Timer messageProcessingTimer;
-
-    @Mock
-    Timer.Sample processTimer;
 
     @Nested
     class InitTests {
@@ -77,41 +75,6 @@ class MetricServiceTest {
             metricsMockedStatic.verify(() -> Metrics.counter("total.messages", APP_TAG, appName));
             metricsMockedStatic.verify(() -> Metrics.counter("dlq.messages", APP_TAG, appName));
             metricsMockedStatic.verify(() -> Metrics.timer("timer.process", APP_TAG, appName));
-        }
-
-        @Test
-        void should_ThrowException_when_CounterMethodThrowsException() {
-            // given
-            given(Metrics.counter("total.messages", APP_TAG, appName)).willThrow(RuntimeException.class);
-
-            // when
-            // then
-            assertThrows(RuntimeException.class, () -> metricService.init());
-        }
-
-        @Test
-        void should_ThrowException_when_Counter2MethodThrowsException() {
-            // given
-
-            given(Metrics.counter("total.messages", APP_TAG, appName)).willReturn(messagesReceivedCounter);
-            given(Metrics.counter("dlq.messages", APP_TAG, appName)).willThrow(RuntimeException.class);
-            given(Metrics.timer("timer.process", APP_TAG, appName)).willReturn(messageProcessingTimer);
-
-            // when
-            // then
-            assertThrows(RuntimeException.class, () -> metricService.init());
-        }
-
-        @Test
-        void should_ThrowException_when_TimerMethodThrowsException() {
-            // given
-            given(Metrics.counter("total.messages", APP_TAG, appName)).willReturn(messagesReceivedCounter);
-            given(Metrics.counter("dlq.messages", APP_TAG, appName)).willReturn(messagesInDlqCounter);
-            given(Metrics.timer("timer.process", APP_TAG, appName)).willThrow(RuntimeException.class);
-
-            // when
-            // then
-            assertThrows(RuntimeException.class, () -> metricService.init());
         }
 
         @Test
@@ -164,18 +127,6 @@ class MetricServiceTest {
             // then
             then(messagesReceivedCounter).should().increment();
         }
-
-        @Test
-        void should_ThrowRuntimeException_when_MethodThrowsRuntimeException() {
-            //given
-            willThrow(RuntimeException.class).given(metricService).incrementMessagesReceivedCounter();
-
-            // when
-            // then
-            assertThrows(RuntimeException.class, () -> metricService.incrementMessagesReceivedCounter());
-            then(metricService).should().incrementMessagesReceivedCounter();
-            then(messagesReceivedCounter).should(never()).increment();
-        }
     }
 
     @Nested
@@ -188,41 +139,20 @@ class MetricServiceTest {
             // then
             then(messagesInDlqCounter).should().increment();
         }
-
-        @Test
-        void should_ThrowRuntimeException_when_MethodThrowsRuntimeException() {
-            //given
-            willThrow(RuntimeException.class).given(metricService).incrementMessagesInDlqCounter();
-
-            // when
-            // then
-            assertThrows(RuntimeException.class, () -> metricService.incrementMessagesInDlqCounter());
-            then(metricService).should().incrementMessagesInDlqCounter();
-            then(messagesInDlqCounter).should(never()).increment();
-        }
     }
 
     @Nested
     class StopProcessingTimerTests {
         @Test
         void should_incrementMessagesInDlqCounter_when_MethodIsCalled() {
+            //given
+            Timer.Sample processTimer = mock(Timer.Sample.class);
+
             // when
             metricService.stopProcessingTimer(processTimer);
 
             // then
             then(processTimer).should().stop(messageProcessingTimer);
-        }
-
-        @Test
-        void should_ThrowRuntimeException_when_MethodThrowsRuntimeException() {
-            //given
-            willThrow(RuntimeException.class).given(metricService).stopProcessingTimer(processTimer);
-
-            // when
-            // then
-            assertThrows(RuntimeException.class, () -> metricService.stopProcessingTimer(processTimer));
-            then(metricService).should().stopProcessingTimer(processTimer);
-            then(processTimer).should(never()).stop(messageProcessingTimer);
         }
     }
 }

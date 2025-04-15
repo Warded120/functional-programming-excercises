@@ -7,292 +7,121 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.ArrayList;
+import java.math.BigDecimal;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
 
 @ExtendWith(MockitoExtension.class)
 class ItemMapperImplTest {
     @InjectMocks
-    ItemMapperImpl itemMapper;
+    private ItemMapperImpl itemMapper;
 
     @Nested
     class MapElementTests {
         @Test
         void should_ReturnItem_when_ElementIsValid() {
-            //given
-            Instant instant = Instant.now();
-            LocalDateTime localDateTime = instant.atZone(ZoneId.systemDefault()).toLocalDateTime();
+            // given
+            String expectedDescription = "data";
+            String expectedCurrency = "UAH";
 
-            Item expected = new Item(localDateTime, 1L, "data", 360d);
+            Item.Change expectedChange = new Item.Change(expectedCurrency, BigDecimal.valueOf(0.0));
+            Item expected = new Item("", expectedDescription, expectedChange);
+
+            Element.Amount amountMock = mock(Element.Amount.class);
+            given(amountMock.currencyCode()).willReturn(expectedCurrency);
 
             Element elementMock = mock(Element.class);
-            given(elementMock.startDate()).willReturn(instant);
-            given(elementMock.endDate()).willReturn(instant.plusSeconds(3600*24));
-            given(elementMock.data()).willReturn("data");
-            given(elementMock.award()).willReturn("360");
+            given(elementMock.type()).willReturn(expectedDescription);
+            given(elementMock.amount()).willReturn(amountMock);
 
-            //when
+            // when
             Item actual = itemMapper.map(elementMock);
 
-            //then
+            // then
             assertEquals(expected, actual);
-            then(elementMock).should(times(2)).startDate();
-            then(elementMock).should().endDate();
-            then(elementMock).should().data();
-            then(elementMock).should().award();
+            then(elementMock).should().type();
+            then(elementMock).should().amount();
+            then(amountMock).should().currencyCode();
         }
 
         @Test
-        void should_ReturnNull_when_ElementStartDateIsNull() {
-            //given
-            Element elementMock = mock(Element.class);
-            given(elementMock.startDate()).willReturn(null);
-
-            //when
-            Item actual = itemMapper.map(elementMock);
-
-            //then
-            assertNull(actual);
-            then(elementMock).should().startDate();
-        }
-
-        @Test
-        void should_ReturnNull_when_ElementEndDateIsNull() {
-            //given
-            Instant instant = Instant.now();
+        void should_ReturnNull_when_ElementFieldsIsNull() {
+            // given
+            String description = "description";
 
             Element elementMock = mock(Element.class);
-            given(elementMock.startDate()).willReturn(instant);
-            given(elementMock.endDate()).willReturn(null);
+            given(elementMock.type()).willReturn(description);
+            given(elementMock.amount()).willReturn(null);
 
-            //when
+            Item expected = new Item("", description, null);
+
+            // when
             Item actual = itemMapper.map(elementMock);
 
-            //then
-            assertNull(actual);
-            then(elementMock).should(times(2)).startDate();
-            then(elementMock).should().endDate();
-        }
-
-        @Test
-        void should_ReturnNull_when_ElementStartDateIsAfterEndDate() {
-            //given
-            Instant instant = Instant.now();
-
-            Element elementMock = mock(Element.class);
-
-            given(elementMock.startDate()).willReturn(instant);
-            given(elementMock.endDate()).willReturn(instant.minusSeconds(3600*24));
-
-            //when
-            Item actual = itemMapper.map(elementMock);
-
-            //then
-            assertNull(actual);
-            then(elementMock).should(times(2)).startDate();
-            then(elementMock).should().endDate();
-        }
-
-        @Test
-        void should_ReturnNull_when_ElementDataIsNull() {
-            //given
-            Instant instant = Instant.now();
-
-            Element elementMock = mock(Element.class);
-            given(elementMock.startDate()).willReturn(instant);
-            given(elementMock.endDate()).willReturn(instant.plusSeconds(3600*24));
-            given(elementMock.data()).willReturn(null);
-
-            //when
-            Item actual = itemMapper.map(elementMock);
-
-            //then
-            assertNull(actual);
-            then(elementMock).should(times(2)).startDate();
-            then(elementMock).should().endDate();
-            then(elementMock).should().data();
-        }
-
-        @Test
-        void should_ReturnNull_when_ElementAwardIsInvalid() {
-            //given
-            Instant instant = Instant.now();
-
-            Element elementMock = mock(Element.class);
-            given(elementMock.startDate()).willReturn(instant);
-            given(elementMock.endDate()).willReturn(instant.plusSeconds(3600*24));
-            given(elementMock.data()).willReturn("data");
-            given(elementMock.award()).willReturn("threeHundredSixty");
-
-            //when
-            Item actual = itemMapper.map(elementMock);
-
-            //then
-            assertNull(actual);
-            then(elementMock).should(times(2)).startDate();
-            then(elementMock).should().endDate();
-            then(elementMock).should().data();
-            then(elementMock).should().award();
-        }
-
-        @Test
-        void should_ReturnNull_when_ElementAwardIsNull() {
-            //given
-            Instant instant = Instant.now();
-
-            Element elementMock = mock(Element.class);
-            given(elementMock.startDate()).willReturn(instant);
-            given(elementMock.endDate()).willReturn(instant.plusSeconds(3600*24));
-            given(elementMock.data()).willReturn("data");
-            given(elementMock.award()).willReturn(null);
-
-            //when
-            Item actual = itemMapper.map(elementMock);
-
-            //then
-            assertNull(actual);
-            then(elementMock).should(times(2)).startDate();
-            then(elementMock).should().endDate();
-            then(elementMock).should().data();
-            then(elementMock).should().award();
+            // then
+            assertEquals(expected, actual);
         }
     }
 
     @Nested
     class MapElementListTests {
         @Test
-        void should_ReturnList_when_InputIsValid() {
-            //given
-            Instant instant = Instant.now();
-            LocalDateTime startDate = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
+        void should_ReturnItemList_when_ElementListIsValid() {
+            // given
+            String currency = "UAH";
 
-            Element element1 = mock(Element.class);
-            given(element1.startDate()).willReturn(instant);
-            given(element1.endDate()).willReturn(instant.plusSeconds(3600*24));
-            given(element1.data()).willReturn("data1");
-            given(element1.award()).willReturn("100.0");
+            Element.Amount amount1 = mock(Element.Amount.class);
+            Element.Amount amount2 = mock(Element.Amount.class);
+            Element.Amount amount3 = mock(Element.Amount.class);
 
-            Element element2 = mock(Element.class);
-            given(element2.startDate()).willReturn(instant);
-            given(element2.endDate()).willReturn(instant.plusSeconds(3600*24*2));
-            given(element2.data()).willReturn("data2");
-            given(element2.award()).willReturn("200.5");
+            given(amount1.currencyCode()).willReturn(currency);
+            given(amount2.currencyCode()).willReturn(currency);
+            given(amount3.currencyCode()).willReturn(currency);
 
-            Element element3 = mock(Element.class);
-            given(element3.startDate()).willReturn(instant);
-            given(element3.endDate()).willReturn(instant.plusSeconds(3600*24*3));
-            given(element3.data()).willReturn("data3");
-            given(element3.award()).willReturn("300.25");
+            Element e1 = mock(Element.class);
+            Element e2 = mock(Element.class);
+            Element e3 = mock(Element.class);
 
-            List<Element> elements = List.of(element1, element2, element3);
+            given(e1.type()).willReturn("data1");
+            given(e2.type()).willReturn("data2");
+            given(e3.type()).willReturn("data3");
+
+            given(e1.amount()).willReturn(amount1);
+            given(e2.amount()).willReturn(amount2);
+            given(e3.amount()).willReturn(amount3);
+
+            List<Element> elements = List.of(e1, e2, e3);
 
             List<Item> expected = List.of(
-                    new Item(startDate, 1L, "data1", 100.0),
-                    new Item(startDate, 2L, "data2", 200.5),
-                    new Item(startDate, 3L, "data3", 300.25)
+                    new Item("", "data1", new Item.Change(currency, BigDecimal.valueOf(0.0))),
+                    new Item("", "data2", new Item.Change(currency, BigDecimal.valueOf(0.0))),
+                    new Item("", "data3", new Item.Change(currency, BigDecimal.valueOf(0.0)))
             );
 
-            //when
+            // when
             List<Item> actual = itemMapper.map(elements);
 
-            //then
+            // then
             assertEquals(expected, actual);
         }
 
         @Test
-        void should_ReturnNull_when_ElementsListIsNull() {
-            assertTrue(itemMapper.map((List<Element>) null).isEmpty());
+        void should_ReturnNull_when_ElementListIsNull() {
+            // when
+            // then
+            assertNull(itemMapper.map((List<Element>) null));
         }
 
         @Test
-        void should_ReturnList_when_SomeListElementsIsInvalid() {
-            //given
-            Instant instant = Instant.now();
-            LocalDateTime startDate = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
-
-            Element element1 = mock(Element.class);
-            given(element1.startDate()).willReturn(null);
-
-            Element element2 = mock(Element.class);
-            given(element2.startDate()).willReturn(instant);
-            given(element2.endDate()).willReturn(instant.plusSeconds(3600*24*2));
-            given(element2.data()).willReturn("data2");
-            given(element2.award()).willReturn("200.5");
-
-            Element element3 = mock(Element.class);
-            given(element3.startDate()).willReturn(instant);
-            given(element3.endDate()).willReturn(instant.plusSeconds(3600*24*3));
-            given(element3.data()).willReturn("data3");
-            given(element3.award()).willReturn("invalid");
-
-            Element element4 = mock(Element.class);
-            given(element4.startDate()).willReturn(instant);
-            given(element4.endDate()).willReturn(instant.plusSeconds(3600*24*4));
-            given(element4.data()).willReturn("data4");
-            given(element4.award()).willReturn("300.25");
-
-            List<Element> elements = List.of(element1, element2, element3, element4);
-
-            List<Item> expected = new ArrayList<>();
-                    expected.add(null);
-                    expected.add(new Item(startDate, 2L, "data2", 200.5));
-                    expected.add(null);
-                    expected.add(new Item(startDate, 4L, "data4", 300.25));
-
-            //when
-            List<Item> actual = itemMapper.map(elements);
-
-            //then
-            assertEquals(expected, actual);
-        }
-
-        @Test
-        void should_ReturnList_when_AllListElementsIsInvalid() {
-            //given
-            Instant instant = Instant.now();
-
-            Element element1 = mock(Element.class);
-            given(element1.startDate()).willReturn(null);
-
-            Element element2 = mock(Element.class);
-            given(element2.startDate()).willReturn(instant);
-            given(element2.endDate()).willReturn(instant.minusSeconds(3600*24*2));
-
-            Element element3 = mock(Element.class);
-            given(element3.startDate()).willReturn(instant);
-            given(element3.endDate()).willReturn(instant.plusSeconds(3600*24*3));
-            given(element3.data()).willReturn(null);
-
-            Element element4 = mock(Element.class);
-            given(element4.startDate()).willReturn(instant);
-            given(element4.endDate()).willReturn(instant.plusSeconds(3600*24*4));
-            given(element4.data()).willReturn("data4");
-            given(element4.award()).willReturn("invalid");
-
-            List<Element> elements = List.of(element1, element2, element3, element4);
-
-            List<Item> expected = new ArrayList<>();
-            expected.add(null);
-            expected.add(null);
-            expected.add(null);
-            expected.add(null);
-
-            //when
-            List<Item> actual = itemMapper.map(elements);
-
-            //then
-            assertEquals(expected, actual);
+        void should_ReturnNull_when_ElementListIsEmpty() {
+            // when
+            // then
+            assertEquals(List.of(), itemMapper.map(List.of()));
         }
     }
 }

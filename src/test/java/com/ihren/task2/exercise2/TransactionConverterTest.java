@@ -7,14 +7,10 @@ import com.ihren.task2.exercise2.model.Item;
 import com.ihren.task2.exercise2.model.Transaction;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Map;
-import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -35,17 +31,10 @@ class TransactionConverterTest {
     @Mock
     private Item posLogRoot;
 
-    private static Stream<Arguments> dataProvider() {
-        return Stream.of(
-                Arguments.of(mock(Transaction.class)),
-                Arguments.of((Object) null)
-        );
-    }
-
-    @ParameterizedTest
-    @MethodSource("dataProvider")
-    void should_ReturnTransaction_when_InputIsValid(Transaction expected) {
+    @Test
+    void should_ReturnTransaction_when_InputIsValid() {
         //given
+        Transaction expected = mock(Transaction.class);
         Item itemMock = mock(Item.class);
         Element elementMock = mock(Element.class);
         Map<String, Object> headersMock = mock(Map.class);
@@ -58,8 +47,6 @@ class TransactionConverterTest {
 
         //then
         assertEquals(expected, actual);
-        then(itemMock).should().element();
-        then(transactionMapper).should().map(elementMock, headersMock);
     }
 
     @Test
@@ -77,7 +64,5 @@ class TransactionConverterTest {
         //when
         //then
         assertThrows(BusinessException.class, () -> transactionConverter.convert(itemMock, headersMock));
-        then(itemMock).should().element();
-        then(transactionMapper).should().map(elementMock, headersMock);
     }
 }

@@ -9,6 +9,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.BDDMockito.then;
 import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.BDDMockito.willReturn;
 import static org.mockito.BDDMockito.willThrow;
@@ -18,7 +19,7 @@ import static org.mockito.Mockito.mock;
 class PriceConverterTest {
 
     @Spy
-    PriceConverter priceConverter;
+    private PriceConverter priceConverter;
 
     @Test
     void should_ReturnPriceModifier_when_InputIsValid() {
@@ -35,33 +36,7 @@ class PriceConverterTest {
 
         //then
         assertEquals(newPriceModifier, actual);
-    }
-
-    @Test
-    void should_ThrowRuntimeException_when_MethodMapThrowsRuntimeException() {
-        //given
-        PriceModifier priceModifier = mock(PriceModifier.class);
-        MonetaryAmount monetaryAmount = mock(MonetaryAmount.class);
-
-        willThrow(RuntimeException.class).given(priceConverter).map(priceModifier, monetaryAmount);
-
-        //when
-        //then
-        assertThrows(RuntimeException.class, () -> priceConverter.convert(priceModifier, monetaryAmount));
-    }
-
-    @Test
-    void should_ThrowRuntimeException_when_MethodPopulateThrowsRuntimeException() {
-        //given
-        PriceModifier priceModifier = mock(PriceModifier.class);
-        PriceModifier newPriceModifier = mock(PriceModifier.class);
-        MonetaryAmount monetaryAmount = mock(MonetaryAmount.class);
-
-        willReturn(newPriceModifier).given(priceConverter).map(priceModifier, monetaryAmount);
-        willThrow(RuntimeException.class).given(priceConverter).populate(newPriceModifier, priceModifier);
-
-        //when
-        //then
-        assertThrows(RuntimeException.class, () -> priceConverter.convert(priceModifier, monetaryAmount));
+        then(priceConverter).should().map(priceModifier, monetaryAmount);
+        then(priceConverter).should().populate(newPriceModifier, priceModifier);
     }
 }

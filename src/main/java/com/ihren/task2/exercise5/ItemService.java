@@ -1,4 +1,4 @@
-package com.ihren.task2.exercise5.service.itemService;
+package com.ihren.task2.exercise5;
 
 import com.ihren.task2.exercise5.model.ItemDocument;
 

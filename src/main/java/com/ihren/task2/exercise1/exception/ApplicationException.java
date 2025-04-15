@@ -1,7 +1,11 @@
 package com.ihren.task2.exercise1.exception;
 
 import com.ihren.task2.exercise1.constant.ErrorCode;
+import lombok.Getter;
 
+import javax.annotation.processing.Generated;
+
+@Getter
 public class ApplicationException extends RuntimeException {
     private final ErrorCode errorCode;
 

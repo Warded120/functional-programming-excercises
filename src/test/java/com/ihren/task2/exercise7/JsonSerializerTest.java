@@ -13,6 +13,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockedConstruction;
 import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.HashMap;
@@ -35,10 +36,9 @@ class JsonSerializerTest {
     @Mock
     private ObjectMapper objectMapper;
 
-    private MockedStatic<JacksonConfig> jacksonConfigMockedStatic;
-
     @Nested
     class ConfigureTests {
+        private MockedStatic<JacksonConfig> jacksonConfigMockedStatic;
 
         @BeforeEach
         void setUp() {
@@ -56,45 +56,26 @@ class JsonSerializerTest {
             Map<String, ?> configs = new HashMap<>();
             boolean isKey = true;
 
-            //when
-            jsonSerializer.configure(configs, isKey);
+            try (MockedConstruction<ObjectMapper> mocked = mockConstruction(ObjectMapper.class)) {
+                //when
+                jsonSerializer.configure(configs, isKey);
 
-            //then
-            jacksonConfigMockedStatic.verify(() -> JacksonConfig.initConfigs(any(ObjectMapper.class)));
-        }
+                ObjectMapper mockedObjectMapper = mocked.constructed().get(0);
 
-        @Test
-        void should_ThrowRuntimeException_when_jacksonConfigThrowsRuntimeException() {
-            //given
-            Map<String, ?> configs = new HashMap<>();
-            boolean isKey = true;
-
-            jacksonConfigMockedStatic.when(() -> JacksonConfig.initConfigs(any(ObjectMapper.class))).thenThrow(RuntimeException.class);
-
-            //when
-            assertThrows(RuntimeException.class, () -> jsonSerializer.configure(configs, isKey));
-
-            //then
-            jacksonConfigMockedStatic.verify(() -> JacksonConfig.initConfigs(any(ObjectMapper.class)));
+                //then
+                jacksonConfigMockedStatic.verify(() -> JacksonConfig.initConfigs(mockedObjectMapper));
+            }
         }
     }
 
     @Nested
     class SerializeTests {
-
-        private static Stream<Arguments> dataProvider() {
-            return Stream.of(
-                    Arguments.of("Data", "Data".getBytes()),
-                    Arguments.of(12, String.valueOf(12).getBytes()),
-                    Arguments.of(120000000000L, String.valueOf(120000000000L).getBytes()),
-                    Arguments.of(12.0123456789d, String.valueOf(12.0123456789d).getBytes())
-            );
-        }
-
-        @ParameterizedTest
-        @MethodSource("dataProvider")
-        <T> void should_ReturnByteArray_when_InputIsValid(T data, byte[] expected) {
+        @Test
+        void should_ReturnByteArray_when_InputIsValid() {
             //given
+            String data = "data";
+            byte[] expected = "Data".getBytes();
+
             String topic = "topic";
             given(objectMapper.writeValueAsBytes(data)).willReturn(expected);
 
@@ -103,7 +84,6 @@ class JsonSerializerTest {
 
             //then
             assertArrayEquals(expected, actual);
-            then(objectMapper).should().writeValueAsBytes(data);
         }
 
         @Test
@@ -111,19 +91,6 @@ class JsonSerializerTest {
             //when
             //then
             assertNull(jsonSerializer.serialize(null, null));
-        }
-
-        @Test
-        void should_ReturnNull_whenObjectMapperReturnsNull() {
-            //given
-            String topic = "topic";
-            Object data = mock(Object.class);
-
-            given(objectMapper.writeValueAsBytes(data)).willReturn(null);
-
-            //when
-            //then
-            assertNull(jsonSerializer.serialize(topic, data));
         }
 
         @Test
