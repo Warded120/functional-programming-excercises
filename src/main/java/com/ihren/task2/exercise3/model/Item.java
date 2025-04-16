@@ -10,5 +10,5 @@ public record Item(
     public record Change(
             String currencyCode,
             BigDecimal amount
-    ) {}
+    ) { }
 }

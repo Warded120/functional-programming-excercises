@@ -6,5 +6,5 @@ public record Element(
 ) {
     public record Amount(
             String currencyCode
-    ) {}
+    ) { }
 }

@@ -8,9 +8,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockedConstruction;
@@ -18,13 +15,12 @@ import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -60,50 +56,48 @@ class JsonSerializerTest {
                 //when
                 jsonSerializer.configure(configs, isKey);
 
-                ObjectMapper mockedObjectMapper = mocked.constructed().get(0);
-
                 //then
+                assertEquals(1, mocked.constructed().size());
+
+                ObjectMapper mockedObjectMapper = mocked.constructed().get(0);
                 jacksonConfigMockedStatic.verify(() -> JacksonConfig.initConfigs(mockedObjectMapper));
             }
         }
     }
 
-    @Nested
-    class SerializeTests {
-        @Test
-        void should_ReturnByteArray_when_InputIsValid() {
-            //given
-            String data = "data";
-            byte[] expected = "Data".getBytes();
+    @Test
+    void should_ReturnByteArray_when_InputIsValid() {
+        //given
+        String data = "data";
+        byte[] expected = "Data".getBytes();
 
-            String topic = "topic";
-            given(objectMapper.writeValueAsBytes(data)).willReturn(expected);
+        String topic = "topic";
+        given(objectMapper.writeValueAsBytes(data)).willReturn(expected);
 
-            //when
-            byte[] actual = jsonSerializer.serialize(topic, data);
+        //when
+        byte[] actual = jsonSerializer.serialize(topic, data);
 
-            //then
-            assertArrayEquals(expected, actual);
-        }
+        //then
+        assertArrayEquals(expected, actual);
+    }
 
-        @Test
-        void should_ReturnNull_when_InputIsNull() {
-            //when
-            //then
-            assertNull(jsonSerializer.serialize(null, null));
-        }
+    @Test
+    void should_ReturnNull_when_InputIsNull() {
+        //when
+        //then
+        assertNull(jsonSerializer.serialize(null, null));
+    }
 
-        @Test
-        void should_ReturnNull_whenObjectMapperThrowsRuntimeException() {
-            //given
-            String topic = "topic";
-            Object data = mock(Object.class);
+    @Test
+    void should_ReturnNull_whenObjectMapperThrowsRuntimeException() {
+        //given
+        String topic = "topic";
+        Object data = mock(Object.class);
 
-            given(objectMapper.writeValueAsBytes(data)).willThrow(RuntimeException.class);
+        given(objectMapper.writeValueAsBytes(data)).willThrow(RuntimeException.class);
 
-            //when
-            //then
-            assertThrows(SerializingException.class, () -> jsonSerializer.serialize(topic, data));
-        }
+        //when
+        //then
+        assertThrows(SerializingException.class, () -> jsonSerializer.serialize(topic, data));
     }
 }

@@ -17,13 +17,10 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.BDDMockito.willThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.mockStatic;
-import static org.mockito.Mockito.never;
 
 @ExtendWith(MockitoExtension.class)
 class MetricServiceTest {
@@ -47,19 +44,16 @@ class MetricServiceTest {
     @Nested
     class InitTests {
         private MockedStatic<Metrics> metricsMockedStatic;
-        private MockedStatic<Timer> timerMockedStatic;
 
         @BeforeEach
         public void init() {
             metricsMockedStatic = mockStatic(Metrics.class);
-            timerMockedStatic = mockStatic(Timer.class);
             ReflectionTestUtils.setField(metricService, "appName", "name");
         }
 
         @AfterEach
         public void tearDown() {
             metricsMockedStatic.close();
-            timerMockedStatic.close();
         }
 
         @Test
@@ -117,42 +111,33 @@ class MetricServiceTest {
         }
     }
 
-    @Nested
-    class IncrementMessagesReceivedCounterTests {
-        @Test
-        void should_IncrementMessagesReceivedCounter_when_MethodIsCalled() {
-            // when
-            metricService.incrementMessagesReceivedCounter();
+    @Test
+    void should_IncrementMessagesReceivedCounter_when_MethodIsCalled() {
+        // when
+        metricService.incrementMessagesReceivedCounter();
 
-            // then
-            then(messagesReceivedCounter).should().increment();
-        }
+        // then
+        then(messagesReceivedCounter).should().increment();
     }
 
-    @Nested
-    class IncrementMessagesInDlqCounterTests {
-        @Test
-        void should_incrementMessagesInDlqCounter_when_MethodIsCalled() {
-            // when
-            metricService.incrementMessagesInDlqCounter();
+    @Test
+    void should_incrementMessagesInDlqCounter_when_MethodIsCalled() {
+        // when
+        metricService.incrementMessagesInDlqCounter();
 
-            // then
-            then(messagesInDlqCounter).should().increment();
-        }
+        // then
+        then(messagesInDlqCounter).should().increment();
     }
 
-    @Nested
-    class StopProcessingTimerTests {
-        @Test
-        void should_incrementMessagesInDlqCounter_when_MethodIsCalled() {
-            //given
-            Timer.Sample processTimer = mock(Timer.Sample.class);
+    @Test
+    void should_stopProcessingTimer_when_MethodIsCalled() {
+        //given
+        Timer.Sample processTimer = mock(Timer.Sample.class);
 
-            // when
-            metricService.stopProcessingTimer(processTimer);
+        // when
+        metricService.stopProcessingTimer(processTimer);
 
-            // then
-            then(processTimer).should().stop(messageProcessingTimer);
-        }
+        // then
+        then(processTimer).should().stop(messageProcessingTimer);
     }
 }

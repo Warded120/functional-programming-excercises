@@ -1,10 +1,8 @@
 package com.ihren.task2.exercise5;
 
-import com.ihren.task2.exercise5.ItemCacheService;
 import com.ihren.task2.exercise5.cache.GenericCache;
 import com.ihren.task2.exercise5.model.ItemDocument;
 import com.ihren.task2.exercise5.service.SainService;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -16,9 +14,6 @@ import java.util.function.Function;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.mock;

@@ -5,7 +5,6 @@ import com.ihren.task2.exercise1.exception.ApplicationException;
 import com.ihren.task2.exercise1.exception.MappingException;
 import com.ihren.task2.exercise1.handler.DLQHandler;
 import com.ihren.task2.exercise1.model.Metrics;
-import io.vavr.control.Try;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -47,7 +46,6 @@ class ExceptionHandlerTest {
         given(func.apply(input)).willReturn(expected);
 
         //when
-        //TODO: is here an action?
         String actual = exceptionHandler.handle(func, input).get();
 
         //then
@@ -65,7 +63,6 @@ class ExceptionHandlerTest {
         given(func.apply(input)).willThrow(MappingException.class);
 
         //when
-        //TODO: is here an action?
         Integer actual = exceptionHandler.handle(func, input).get();
 
         //then
@@ -85,7 +82,6 @@ class ExceptionHandlerTest {
         given(func.apply(input)).willThrow(RuntimeException.class);
 
         //when
-        //TODO: is here an action?
         Integer actual = exceptionHandler.handle(func, input).get();
 
         System.out.println(actual);
