@@ -17,7 +17,7 @@ public class TransactionConverter {
     private final Item posLogRoot;
 
     public Transaction convert(Item item, Map<String, Object> headers) {
-        return (Transaction) Try.of(() -> transactionMapper.map(item.element(), headers))
+        return Try.of(() -> transactionMapper.map(item.element(), headers))
             .recoverWith(
                     BusinessException.class,
                     ex -> Try.failure(new BusinessException(

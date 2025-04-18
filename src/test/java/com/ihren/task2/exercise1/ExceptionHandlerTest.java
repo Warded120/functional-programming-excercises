@@ -4,7 +4,7 @@ import com.ihren.task2.exercise1.constant.ErrorCode;
 import com.ihren.task2.exercise1.exception.ApplicationException;
 import com.ihren.task2.exercise1.exception.MappingException;
 import com.ihren.task2.exercise1.handler.DLQHandler;
-import com.ihren.task2.exercise1.model.Metrics;
+import com.ihren.task2.exercise1.service.Metrics;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;

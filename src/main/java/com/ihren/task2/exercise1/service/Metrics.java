@@ -1,4 +1,4 @@
-package com.ihren.task2.exercise1.model;
+package com.ihren.task2.exercise1.service;
 
 public class Metrics {
 
