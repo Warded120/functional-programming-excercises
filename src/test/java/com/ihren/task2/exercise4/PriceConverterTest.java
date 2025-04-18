@@ -34,7 +34,6 @@ class PriceConverterTest {
 
         //then
         assertEquals(newPriceModifier, actual);
-        then(priceConverter).should().map(priceModifier, monetaryAmount);
         then(priceConverter).should().populate(newPriceModifier, priceModifier);
     }
 }

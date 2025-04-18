@@ -13,6 +13,7 @@ import org.mockito.Mock;
 import org.mockito.MockedConstruction;
 import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.util.ReflectionTestUtils;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,15 +36,18 @@ class JsonSerializerTest {
     @Nested
     class ConfigureTests {
         private MockedStatic<JacksonConfig> jacksonConfigMockedStatic;
+        private MockedConstruction<ObjectMapper> mockedConstruction;
 
         @BeforeEach
         void setUp() {
             jacksonConfigMockedStatic = mockStatic(JacksonConfig.class);
+            mockedConstruction = mockConstruction(ObjectMapper.class);
         }
 
         @AfterEach
         void tearDown() {
             jacksonConfigMockedStatic.close();
+            mockedConstruction.close();
         }
 
         @Test
@@ -52,16 +56,16 @@ class JsonSerializerTest {
             Map<String, ?> configs = new HashMap<>();
             boolean isKey = true;
 
-            try (MockedConstruction<ObjectMapper> mocked = mockConstruction(ObjectMapper.class)) {
-                //when
-                jsonSerializer.configure(configs, isKey);
+            //when
+            jsonSerializer.configure(configs, isKey);
 
-                //then
-                assertEquals(1, mocked.constructed().size());
+            //then
+            assertEquals(1, mockedConstruction.constructed().size());
+            ObjectMapper mockedObjectMapper = mockedConstruction.constructed().get(0);
 
-                ObjectMapper mockedObjectMapper = mocked.constructed().get(0);
-                jacksonConfigMockedStatic.verify(() -> JacksonConfig.initConfigs(mockedObjectMapper));
-            }
+            jacksonConfigMockedStatic.verify(() -> JacksonConfig.initConfigs(mockedObjectMapper));
+
+            assertEquals(mockedObjectMapper, ReflectionTestUtils.getField(jsonSerializer, "objectMapper"));
         }
     }
 

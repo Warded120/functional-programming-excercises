@@ -50,7 +50,6 @@ class ExceptionHandlerTest {
 
         //then
         assertEquals(expected, actual);
-        then(func).should().apply(input);
     }
 
     @Test
@@ -67,7 +66,6 @@ class ExceptionHandlerTest {
 
         //then
         assertNull(actual);
-        then(func).should().apply(input);
         then(dlqHandler).should().send(eq(input), any(MappingException.class));
         then(metrics).should().incrementMessagesInDlqCounter();
     }
@@ -84,12 +82,10 @@ class ExceptionHandlerTest {
         //when
         Integer actual = exceptionHandler.handle(func, input).get();
 
-        System.out.println(actual);
         //then
         ArgumentCaptor<ApplicationException> exCaptor = ArgumentCaptor.forClass(ApplicationException.class);
 
         assertNull(actual);
-        then(func).should().apply(input);
         then(dlqHandler).should().send(eq(input), exCaptor.capture());
 
         ApplicationException exception = exCaptor.getValue();

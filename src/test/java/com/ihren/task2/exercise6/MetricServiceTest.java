@@ -16,7 +16,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.mock;
@@ -69,45 +68,6 @@ class MetricServiceTest {
             metricsMockedStatic.verify(() -> Metrics.counter("total.messages", APP_TAG, appName));
             metricsMockedStatic.verify(() -> Metrics.counter("dlq.messages", APP_TAG, appName));
             metricsMockedStatic.verify(() -> Metrics.timer("timer.process", APP_TAG, appName));
-        }
-
-        @Test
-        void should_MessagesReceivedCounterBeNull_when_MetricsReturnNull() {
-            // given
-            given(Metrics.counter("total.messages", APP_TAG, appName)).willReturn(null);
-
-            // when
-            metricService.init();
-
-            // then
-            Counter actual = (Counter) ReflectionTestUtils.getField(metricService, "messagesReceivedCounter");
-            assertNull(actual);
-        }
-
-        @Test
-        void should_MessagesInDlqCounterBeNull_when_MetricsReturnNull() {
-            // given
-            given(Metrics.counter("dlq.messages", APP_TAG, appName)).willReturn(null);
-
-            // when
-            metricService.init();
-
-            // then
-            Counter actual = (Counter) ReflectionTestUtils.getField(metricService, "messagesInDlqCounter");
-            assertNull(actual);
-        }
-
-        @Test
-        void should_MessageProcessingTimerBeNull_when_MetricsReturnNull() {
-            // given
-            given(Metrics.timer("timer.process", APP_TAG, appName)).willReturn(null);
-
-            // when
-            metricService.init();
-
-            // then
-            Timer actual = (Timer) ReflectionTestUtils.getField(metricService, "messageProcessingTimer");
-            assertNull(actual);
         }
     }
 

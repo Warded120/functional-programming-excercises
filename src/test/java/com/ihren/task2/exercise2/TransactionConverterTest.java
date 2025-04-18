@@ -34,15 +34,15 @@ class TransactionConverterTest {
     void should_ReturnTransaction_when_InputIsValid() {
         //given
         Transaction expected = mock(Transaction.class);
-        Item itemMock = mock(Item.class);
-        Element elementMock = mock(Element.class);
-        Map<String, Object> headersMock = mock(Map.class);
+        Item item = mock(Item.class);
+        Element element = mock(Element.class);
+        Map<String, Object> headers = mock(Map.class);
 
-        given(itemMock.element()).willReturn(elementMock);
-        given(transactionMapper.map(elementMock, headersMock)).willReturn(expected);
+        given(item.element()).willReturn(element);
+        given(transactionMapper.map(element, headers)).willReturn(expected);
 
         //when
-        Transaction actual = transactionConverter.convert(itemMock, headersMock);
+        Transaction actual = transactionConverter.convert(item, headers);
 
         //then
         assertEquals(expected, actual);
@@ -51,17 +51,19 @@ class TransactionConverterTest {
     @Test
     void should_ThrowRuntimeException_when_InputIsInvalid() {
         //given
-        Item itemMock = mock(Item.class);
-        Element elementMock = mock(Element.class);
-        Map<String, Object> headersMock = mock(Map.class);
+        Item item = mock(Item.class);
+        Element element = mock(Element.class);
+        Map<String, Object> headers = mock(Map.class);
 
-        given(itemMock.element()).willReturn(elementMock);
-        willThrow(BusinessException.class).given(transactionMapper).map(elementMock, headersMock);
-        given(posLogRoot.element()).willReturn(elementMock);
-        given(elementMock.transactionId()).willReturn(1);
+        given(item.element()).willReturn(element);
+        given(posLogRoot.element()).willReturn(element);
+        given(element.transactionId()).willReturn(1);
+        willThrow(BusinessException.class).given(transactionMapper).map(element, headers);
 
         //when
         //then
-        assertThrows(BusinessException.class, () -> transactionConverter.convert(itemMock, headersMock));
+        BusinessException businessException =
+                assertThrows(BusinessException.class, () -> transactionConverter.convert(item, headers));
+        assertEquals(element.transactionId().toString(), businessException.getTransactionId());
     }
 }

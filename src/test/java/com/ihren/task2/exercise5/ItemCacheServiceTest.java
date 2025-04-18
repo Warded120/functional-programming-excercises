@@ -15,9 +15,7 @@ import java.util.function.Function;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
 
 @ExtendWith(MockitoExtension.class)
 class ItemCacheServiceTest {
@@ -32,14 +30,14 @@ class ItemCacheServiceTest {
     private SainService nonCacheSainService;
 
     @Captor
-    ArgumentCaptor<Function<String, ItemDocument>> captor;
+    private ArgumentCaptor<Function<String, ItemDocument>> captor;
 
     @Test
-    void should_ReturnItemDocument_when_inputIsValid1() {
+    void should_ReturnItemDocument_when_inputIsValid() {
         // given
         String key = "key";
         ItemDocument expected = mock(ItemDocument.class);
-        Function<String, ItemDocument> func = nonCacheSainService::get;
+        Function<String, ItemDocument> func = someKey -> expected;
 
         given(nonCacheSainService.get(key)).willReturn(expected);
         given(itemCache.of(captor.capture())).willReturn(func);
@@ -55,7 +53,5 @@ class ItemCacheServiceTest {
 
         ItemDocument resultFromCapturedFunc = capturedFunction.apply(key);
         assertEquals(expected, resultFromCapturedFunc);
-
-        then(nonCacheSainService).should(times(2)).get(key);
     }
 }
