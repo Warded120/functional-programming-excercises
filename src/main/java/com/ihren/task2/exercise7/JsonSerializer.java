@@ -2,7 +2,7 @@ package com.ihren.task2.exercise7;
 
 import com.ihren.task2.exercise7.exception.SerializingException;
 import com.ihren.task2.exercise7.mapper.ObjectMapper;
-import com.ihren.task2.exercise7.util.JacksonConfig;
+import com.ihren.task2.exercise7.config.JacksonConfig;
 import io.vavr.control.Try;
 
 import java.util.Map;

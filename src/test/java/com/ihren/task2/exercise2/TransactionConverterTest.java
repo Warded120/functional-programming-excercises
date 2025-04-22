@@ -49,7 +49,7 @@ class TransactionConverterTest {
     }
 
     @Test
-    void should_ThrowRuntimeException_when_InputIsInvalid() {
+    void should_ThrowException_when_InputIsInvalid() {
         //given
         Item item = mock(Item.class);
         Element element = mock(Element.class);
@@ -65,5 +65,21 @@ class TransactionConverterTest {
         BusinessException businessException =
                 assertThrows(BusinessException.class, () -> transactionConverter.convert(item, headers));
         assertEquals(element.transactionId().toString(), businessException.getTransactionId());
+    }
+
+    //TODO: do i need this test?
+    @Test
+    void should_ThrowOtherException_when_MapThrowsException() {
+        //given
+        Item item = mock(Item.class);
+        Element element = mock(Element.class);
+        Map<String, Object> headers = mock(Map.class);
+
+        given(item.element()).willReturn(element);
+        willThrow(RuntimeException.class).given(transactionMapper).map(element, headers);
+
+        //when
+        //then
+        assertThrows(RuntimeException.class, () -> transactionConverter.convert(item, headers));
     }
 }

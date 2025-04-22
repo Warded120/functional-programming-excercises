@@ -1,4 +1,4 @@
-package com.ihren.task2.exercise7.util;
+package com.ihren.task2.exercise7.config;
 
 import com.ihren.task2.exercise7.mapper.ObjectMapper;
 

@@ -1,4 +1,4 @@
-package com.ihren.task2.exercise6.model;
+package com.ihren.task2.exercise6.service;
 
 public class Metrics {
     public static Counter counter(String counterName, String appTag, String appName) {

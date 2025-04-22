@@ -1,4 +1,4 @@
-package com.ihren.task2.exercise6.model;
+package com.ihren.task2.exercise6.service;
 
 public class Counter {
     public void increment() {

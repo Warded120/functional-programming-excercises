@@ -3,9 +3,9 @@ package com.ihren.task2.exercise6;
 import com.ihren.task2.exercise6.annotation.Component;
 import com.ihren.task2.exercise6.annotation.PostConstruct;
 import com.ihren.task2.exercise6.annotation.Value;
-import com.ihren.task2.exercise6.model.Counter;
-import com.ihren.task2.exercise6.model.Timer;
-import com.ihren.task2.exercise6.model.Metrics;
+import com.ihren.task2.exercise6.service.Counter;
+import com.ihren.task2.exercise6.service.Timer;
+import com.ihren.task2.exercise6.service.Metrics;
 
 @Component
 public class MetricService {

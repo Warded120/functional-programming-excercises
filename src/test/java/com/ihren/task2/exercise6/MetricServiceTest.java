@@ -1,8 +1,8 @@
 package com.ihren.task2.exercise6;
 
-import com.ihren.task2.exercise6.model.Counter;
-import com.ihren.task2.exercise6.model.Metrics;
-import com.ihren.task2.exercise6.model.Timer;
+import com.ihren.task2.exercise6.service.Counter;
+import com.ihren.task2.exercise6.service.Metrics;
+import com.ihren.task2.exercise6.service.Timer;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
