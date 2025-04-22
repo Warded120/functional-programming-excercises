@@ -1,6 +1,5 @@
 package com.ihren.task1.exercise4;
 
-import com.ihren.task1.exercise4.Exercise4;
 import com.ihren.task1.exercise4.models.DateTimeUtils;
 import com.ihren.task1.exercise4.models.Element;
 import com.ihren.task1.exercise4.models.ElementMapper;

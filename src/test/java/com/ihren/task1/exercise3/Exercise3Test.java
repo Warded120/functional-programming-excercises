@@ -1,7 +1,6 @@
 package com.ihren.task1.exercise3;
 
 import com.ihren.task1.exercise3.models.Item;
-import com.ihren.task1.exercise3.Exercise3;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

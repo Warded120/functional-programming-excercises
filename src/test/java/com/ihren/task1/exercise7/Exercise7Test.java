@@ -1,7 +1,6 @@
 package com.ihren.task1.exercise7;
 
 import com.ihren.task1.exercise7.models.Action;
-import com.ihren.task1.exercise7.Exercise7;
 import com.ihren.task1.exercise7.models.Item;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
